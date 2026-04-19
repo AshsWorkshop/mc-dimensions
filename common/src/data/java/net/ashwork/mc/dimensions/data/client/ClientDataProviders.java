@@ -1,0 +1,25 @@
+package net.ashwork.mc.dimensions.data.client;
+
+import net.ashwork.mc.dimensions.data.server.DimensionsRecipeProvider;
+import net.ashwork.mc.dimensions.registry.DimensionItems;
+import net.ashwork.mc.multiloader.api.data.generator.DataProviderGatherer;
+import net.ashwork.mc.multiloader.api.data.generator.provider.client.ModelCreator;
+import net.ashwork.mc.multiloader.api.data.generator.provider.client.TranslationKeyMapper;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.model.ModelTemplates;
+
+public interface ClientDataProviders {
+
+    static void gather(DataProviderGatherer gatherer) {
+        gatherer.access(TranslationKeyMapper.ENGLISH_PROVIDER).add(ClientDataProviders::englishTranslations);
+        gatherer.access(ModelCreator.ITEM_PROVIDER).add(ClientDataProviders::itemModels);
+    }
+
+    static void englishTranslations(TranslationKeyMapper mapper) {
+        mapper.item(DimensionItems.GOLD_SPECK, "Gold Speck");
+    }
+
+    static void itemModels(ItemModelGenerators generators) {
+        generators.generateFlatItem(DimensionItems.GOLD_SPECK.value(), ModelTemplates.FLAT_ITEM);
+    }
+}
