@@ -19,24 +19,29 @@ plugins {
     id("net.neoforged.moddev")
 }
 
-internal val main: Project = rootProject.project(":common")
+internal val main: Project = rootProject.project("${providers.gradleProperty("mod_id").get()}-common")
 
 // Create source sets
-internal val common: SourceSet = sourceSets.createFrom("common", sourceSets["main"], main.sourceSets["common"])
-internal val client: SourceSet = sourceSets.createFrom("client", common, common, main.sourceSets["client"])
-internal val data: SourceSet = sourceSets.createFrom("data", client, client, main.sourceSets["data"])
+val common = configureInheritingFeature("common", "common:common")
+val client = configureInheritingFeature("client", "common", "common:client")
+val data = configureInheritingFeature("data", "main", "common:data", publish = true, bundle = listOf("common:data"))
 
-tasks.named("compileJava") {
-    dependsOn(tasks.named("compileDataJava"))
-}
+configureInheritingFeature("main", "common", "client", "common:common", "common:client", publish = true, bundle = listOf("common", "client", "common:common", "common:client"))
 
 internal val generated: SourceSet = sourceSets.create("generated") {
     java.setSrcDirs(emptyList<Any>())
 }
 
+val commonImplementation by configurations.getting
+
+
 dependencies {
-    implementation("net.ashwork.mc:ashsmultiloader-neoforge")
-    implementation("net.ashwork.mc:ashsmultiloader-neoforge-data")
+    commonImplementation(platform("net.ashwork.mc:ashsmultiloader:${resolveProperty("vanillaMinecraft")}.+"))
+    commonImplementation("net.ashwork.mc:ashsmultiloader-neoforge") {
+        capabilities {
+            requireFeature("data")
+        }
+    }
 }
 
 enum class VersionPart(val componentIndex: Int) {
@@ -121,6 +126,8 @@ neoForge {
     // Sync tasks
     ideSyncTask(modFile)
 
+    addModdingDependenciesTo(common)
+
     mods.create(resolveProperty("mod_id")) {
         listOf(main.sourceSets, sourceSets).flatMap { it }.forEach {
             sourceSet(it)
@@ -154,14 +161,6 @@ neoForge {
     }
 }
 
-afterEvaluate {
-    publishSourceSets(
-        project.name, listOf(
-            common, client,
-            main.sourceSets["common"], main.sourceSets["client"]
-        ),
-        project.base.archivesName.get()
-    ) {
-        dependencies { runtime(configurations.compileClasspath) { it in listOf("neoforge") } }
-    }
+publication {
+    name = "${resolveProperty("mod_name")} (${project.name})"
 }

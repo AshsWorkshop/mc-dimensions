@@ -3,7 +3,6 @@ import net.ashwork.gradle.multiloader.*
 import org.gradle.api.Action
 import org.gradle.api.publish.maven.MavenPomLicense
 import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.`maven-publish`
 import org.gradle.kotlin.dsl.withType
 
@@ -11,6 +10,8 @@ plugins {
     id("de.undercouch.download")
     `maven-publish`
 }
+
+group = resolveProperty("mod_group")
 
 download.run {
     src("https://raw.githubusercontent.com/spdx/license-list-data/main/json/details/${resolveProperty("mod_license")}.json")

@@ -9,26 +9,36 @@ plugins {
 }
 
 // Create source sets
-internal val common: SourceSet = sourceSets.createFrom("common", sourceSets["main"])
-internal val client: SourceSet = sourceSets.createFrom("client", common, common)
-internal val data: SourceSet = sourceSets.createFrom("data", client, client)
+val common = configureInheritingFeature("common")
+val client = configureInheritingFeature("client", "common")
+val data = configureInheritingFeature("data", "main", publish = true)
 
-dependencies {
-    implementation("net.ashwork.mc:ashsmultiloader-api")
-    implementation("net.ashwork.mc:ashsmultiloader-api-data")
-    implementation(group = "net.ashwork.mc", name = "ashsmultiloader-api-data", classifier = "accesstransformer", ext = "cfg")
-}
+configureInheritingFeature("main", "common", "client", publish = true, bundle = listOf("common", "client"))
 
 neoForge {
     // Configure vanilla mode
     neoFormVersion = resolveProperty("vanillaNeoform")
 
-    accessTransformers.from(configurations.runtimeClasspath.get().files.filter { it.path.endsWith("cfg") })
+    addModdingDependenciesTo(common)
 }
 
-afterEvaluate {
-    publishSourceSets(
-        project.name, listOf(common, client),
-        project.base.archivesName.get()
-    )
+val commonImplementation by configurations.getting
+
+dependencies {
+    commonImplementation(platform("net.ashwork.mc:ashsmultiloader:${resolveProperty("vanillaMinecraft")}.+"))
+    commonImplementation("net.ashwork.mc:ashsmultiloader-api") {
+        capabilities {
+            requireFeature("data")
+        }
+    }
+    accessTransformers(platform("net.ashwork.mc:ashsmultiloader:${resolveProperty("vanillaMinecraft")}.+"))
+    accessTransformers("net.ashwork.mc:ashsmultiloader-api") {
+        capabilities {
+            requireFeature("data")
+        }
+    }
+}
+
+publication {
+    name = "${resolveProperty("mod_name")} (${project.name})"
 }

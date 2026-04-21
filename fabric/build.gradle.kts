@@ -17,12 +17,18 @@ plugins {
     id("net.fabricmc.fabric-loom")
 }
 
-internal val main: Project = rootProject.project(":common")
+internal val main: Project = rootProject.project("${providers.gradleProperty("mod_id").get()}-common")
 
 // Create source sets
-internal val common: SourceSet = sourceSets.createFrom("common", sourceSets["main"], main.sourceSets["common"])
-internal val client: SourceSet = sourceSets.createFrom("client", common, common, main.sourceSets["client"])
-internal val data: SourceSet = sourceSets.createFrom("data", client, client, main.sourceSets["data"])
+val common = configureInheritingFeature("common", "common:common")
+val client = configureInheritingFeature("client", "common", "common:client")
+val data = configureInheritingFeature("data", "common", "client", "common:data", publish = true, bundle = listOf("common:data"), depend = listOf("main"))
+
+configureInheritingFeature("main", "common", "client", "common:common", "common:client", publish = true, bundle = listOf("common", "client", "common:common", "common:client"), excludeClasspathDependencies = true)
+
+// `excludeClasspathDependencies` lets us do this
+configurations.named("commonCompileClasspath") { extendsFrom(configurations.compileClasspath) }
+configurations.named("commonRuntimeClasspath") { extendsFrom(configurations.runtimeClasspath) }
 
 tasks.named("compileJava") {
     dependsOn(tasks.named("compileDataJava"))
@@ -32,12 +38,19 @@ internal val generated: SourceSet = sourceSets.create("generated") {
     java.setSrcDirs(emptyList<Any>())
 }
 
+val commonImplementation by configurations.getting
+
 dependencies {
     minecraft("com.mojang:minecraft:${resolveProperty("vanillaMinecraft")}")
-    implementation("net.fabricmc:fabric-loader:${resolveProperty("fabricLoader")}")
-    implementation("net.fabricmc.fabric-api:fabric-api:${resolveProperty("fabricApi")}")
-    implementation("net.ashwork.mc:ashsmultiloader-fabric")
-    implementation("net.ashwork.mc:ashsmultiloader-fabric-data")
+    // This needs to also be present in "main" so that loom sets up loader properly, as it is hard-coded to "main".
+    implementation(commonImplementation("net.fabricmc:fabric-loader:${resolveProperty("fabricLoader")}")!!)
+    commonImplementation("net.fabricmc.fabric-api:fabric-api:${resolveProperty("fabricApi")}")
+    commonImplementation(platform("net.ashwork.mc:ashsmultiloader:${resolveProperty("vanillaMinecraft")}.+"))
+    commonImplementation("net.ashwork.mc:ashsmultiloader-fabric") {
+        capabilities {
+            requireFeature("data")
+        }
+    }
 }
 
 fun generateModFile(name: String = "", dependsOn: Pair<String, String>? = null): TaskProvider<Task> {
@@ -68,16 +81,16 @@ fun generateModFile(name: String = "", dependsOn: Pair<String, String>? = null):
                     listOf(
                         resolveProperty("mod_group"),
                         resolveProperty("mod_subpackage"),
-                        project.name,
-                        "${project.name.capitalizeWords()}${resolveProperty("mod_subpackage").capitalizeWords()}"
+                        project.projectDir.name,
+                        "${project.projectDir.name.capitalizeWords()}${resolveProperty("mod_subpackage").capitalizeWords()}"
                     ).joinToString(".")
                 ),
                 "fabric-datagen" to listOf(
                     listOf(
                         resolveProperty("mod_group"),
                         resolveProperty("mod_subpackage"),
-                        project.name,
-                        "${project.name.capitalizeWords()}${resolveProperty("mod_subpackage").capitalizeWords()}${data.name.capitalizeWords()}"
+                        project.projectDir.name,
+                        "${project.projectDir.name.capitalizeWords()}${resolveProperty("mod_subpackage").capitalizeWords()}${data.name.capitalizeWords()}"
                     ).joinToString(".")
                 )
             ),
@@ -98,12 +111,11 @@ internal val modFile = generateModFile()
 client.resources {
     srcDir(modFile)
     source(generated.resources)
-    source(main.sourceSets["client"].resources)
     exclude("./cache")
 }
 
-tasks.withType<IdeaSyncTask>().forEach {
-    it.finalizedBy(modFile)
+tasks.withType<IdeaSyncTask>().configureEach {
+    dependsOn(modFile)
 }
 
 loom {
@@ -130,14 +142,6 @@ fabricApi.configureDataGeneration {
     outputDirectory = generated.resources.srcDirs.first()
 }
 
-afterEvaluate {
-    publishSourceSets(
-        project.name, listOf(
-            common, client,
-            main.sourceSets["common"], main.sourceSets["client"]
-        ),
-        project.base.archivesName.get()
-    ) {
-        dependencies { runtime(configurations.compileClasspath) { it in listOf("fabric-loader", "fabric-api") } }
-    }
+publication {
+    name = "${resolveProperty("mod_name")} (${project.name})"
 }
