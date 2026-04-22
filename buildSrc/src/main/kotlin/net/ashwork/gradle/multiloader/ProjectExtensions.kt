@@ -292,7 +292,7 @@ fun Project.publishedAccessTransformer(file: File, feature: String) {
         from(file.toRelativeString(project.projectDir))
         if (feature == "main") {
             // We can use what MDG already has here
-            publish(file.toRelativeString(project.projectDir))
+            publish(file)
         }
     }
     if (feature != "main") {
