@@ -21,6 +21,8 @@ public class DimensionsRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes() {
         this.twoByTwoPacker(RecipeCategory.MISC, Items.GOLD_NUGGET, DimensionItems.GOLD_SPECK.value(), "from_speck");
+        this.twoByTwoPacker(RecipeCategory.MISC, Items.IRON_NUGGET, DimensionItems.IRON_SPECK.value(), "from_speck");
+        this.twoByTwoPacker(RecipeCategory.MISC, Items.COPPER_NUGGET, DimensionItems.COPPER_SPECK.value(), "from_speck");
     }
 
     protected void twoByTwoPacker(RecipeCategory category, ItemLike result, ItemLike ingredient, String suffix) {

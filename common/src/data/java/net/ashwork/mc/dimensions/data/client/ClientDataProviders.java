@@ -17,9 +17,13 @@ public interface ClientDataProviders {
 
     static void englishTranslations(TranslationKeyMapper mapper) {
         mapper.item(DimensionItems.GOLD_SPECK, "Gold Speck");
+        mapper.item(DimensionItems.IRON_SPECK, "Iron Speck");
+        mapper.item(DimensionItems.COPPER_SPECK, "Copper Speck");
     }
 
     static void itemModels(ItemModelGenerators generators) {
         generators.generateFlatItem(DimensionItems.GOLD_SPECK.value(), ModelTemplates.FLAT_ITEM);
+        generators.generateFlatItem(DimensionItems.IRON_SPECK.value(), ModelTemplates.FLAT_ITEM);
+        generators.generateFlatItem(DimensionItems.COPPER_SPECK.value(), ModelTemplates.FLAT_ITEM);
     }
 }
