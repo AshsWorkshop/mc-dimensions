@@ -33,6 +33,13 @@ idea.module {
     isDownloadSources = true
 }
 
+configurations.all {
+    resolutionStrategy {
+        cacheDynamicVersionsFor(10, TimeUnit.MINUTES)
+        cacheChangingModulesFor(10, TimeUnit.MINUTES)
+    }
+}
+
 repositories {
     mavenCentral()
     maven {

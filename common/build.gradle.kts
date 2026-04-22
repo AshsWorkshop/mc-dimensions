@@ -32,6 +32,7 @@ dependencies {
         }
     }
     accessTransformers(platform("net.ashwork.mc:ashsmultiloader:${resolveProperty("vanillaMinecraft")}.+"))
+    accessTransformers("net.ashwork.mc:ashsmultiloader-api")
     accessTransformers("net.ashwork.mc:ashsmultiloader-api") {
         capabilities {
             requireFeature("data")

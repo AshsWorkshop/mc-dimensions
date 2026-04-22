@@ -111,6 +111,7 @@ internal val modFile = generateModFile()
 client.resources {
     srcDir(modFile)
     source(generated.resources)
+    source(main.sourceSets["client"].resources)
     exclude("./cache")
 }
 
