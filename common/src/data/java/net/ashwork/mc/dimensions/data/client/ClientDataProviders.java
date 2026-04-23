@@ -1,7 +1,9 @@
 package net.ashwork.mc.dimensions.data.client;
 
+import net.ashwork.mc.dimensions.data.DimensionsData;
 import net.ashwork.mc.dimensions.data.server.DimensionsRecipeProvider;
 import net.ashwork.mc.dimensions.registry.DimensionItems;
+import net.ashwork.mc.multiloader.api.common.event.resources.RegisterBuiltInPacks;
 import net.ashwork.mc.multiloader.api.data.generator.DataProviderGatherer;
 import net.ashwork.mc.multiloader.api.data.generator.provider.client.ModelCreator;
 import net.ashwork.mc.multiloader.api.data.generator.provider.client.TranslationKeyMapper;
@@ -16,6 +18,10 @@ public interface ClientDataProviders {
     }
 
     static void englishTranslations(TranslationKeyMapper mapper) {
+        var alt = DimensionsData.PLATFORM.withId("alternative");
+        mapper.descriptionId(RegisterBuiltInPacks.RESOURCE_PACK_ID, alt, "Dimensions | Alternatives");
+        mapper.descriptionId(RegisterBuiltInPacks.RESOURCE_PACK_ID, RegisterBuiltInPacks.RESOURCE_PACK_DESC, alt, "Alternative configurations for Ash's Dimensions");
+
         mapper.item(DimensionItems.GOLD_SPECK, "Gold Speck");
         mapper.item(DimensionItems.IRON_SPECK, "Iron Speck");
         mapper.item(DimensionItems.COPPER_SPECK, "Copper Speck");
