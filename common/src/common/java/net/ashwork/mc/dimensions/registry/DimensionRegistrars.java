@@ -2,6 +2,7 @@ package net.ashwork.mc.dimensions.registry;
 
 import net.ashwork.mc.dimensions.Dimensions;
 import net.ashwork.mc.multiloader.api.base.extension.LoaderExtension;
+import net.ashwork.mc.multiloader.api.common.registry.BlockItemRegistrar;
 import net.ashwork.mc.multiloader.api.common.registry.ItemRegistrar;
 import net.ashwork.mc.multiloader.api.common.registry.Registrar;
 import net.ashwork.mc.multiloader.api.common.registry.RegistrarAccessor;
@@ -20,6 +21,7 @@ public class DimensionRegistrars {
     }
 
     public static final ItemRegistrar ITEM = createRegistrar(ItemRegistrar.BASIC, DimensionItems::register);
+    public static final BlockItemRegistrar BLOCK_ITEM = createRegistrar(BlockItemRegistrar.BASIC, DimensionBlocksWithItems::register);
 
     public static void init() {
         INIT.forEach(Runnable::run);
@@ -31,7 +33,7 @@ public class DimensionRegistrars {
         return registry;
     }
 
-    private static <T, R extends Registrar<T>> R createRegistrar(LoaderExtension.Key<R> key, Runnable initializeEntries) {
+    private static <R> R createRegistrar(LoaderExtension.Key<R> key, Runnable initializeEntries) {
         var registry = Dimensions.PLATFORM.access(key);
         INIT.add(initializeEntries);
         return registry;
