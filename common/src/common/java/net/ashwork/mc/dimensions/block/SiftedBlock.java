@@ -12,6 +12,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
+// To revert sifting
+// For any side
+// - Likelihood of conversion
+// - Check conditions comparing nearby block
+// - Convert to block
 public class SiftedBlock extends Block {
 
     private final Block revertTo;
