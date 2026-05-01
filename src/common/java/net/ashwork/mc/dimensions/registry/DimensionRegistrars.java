@@ -1,0 +1,52 @@
+package net.ashwork.mc.dimensions.registry;
+
+import net.ashwork.mc.dimensions.AshsDimensions;
+import net.ashwork.mc.dimensions.util.ClassUtils;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+public class DimensionRegistrars {
+    private static final List<RegistrarEntry> INIT = new ArrayList<>();
+
+    public static final DeferredRegister.Items ITEM = createRegistrar(DeferredRegister::createItems, DimensionItems::register);
+
+    private DimensionRegistrars() {
+        ClassUtils.doNotInstantiate(this);
+    }
+
+    public static void registerEntries(IEventBus modBus) {
+        INIT.forEach(entry -> {
+            // Register to the mod bus
+            entry.registrar().register(modBus);
+            // Initialize entries
+            entry.initializeEntries().accept(modBus);
+        });
+    }
+
+    private static <T> DeferredRegister<T> createRegistrar(ResourceKey<? extends Registry<T>> key, Runnable initializeEntries) {
+        return createRegistrar(modId -> DeferredRegister.create(key, modId), initializeEntries);
+    }
+
+    private static <T> DeferredRegister<T> createRegistrar(ResourceKey<? extends Registry<T>> key, Consumer<IEventBus> initializeEntries) {
+        return createRegistrar(modId -> DeferredRegister.create(key, modId), initializeEntries);
+    }
+
+    private static <T, R extends DeferredRegister<T>> R createRegistrar(Function<String, R> factory, Runnable initializeEntries) {
+        return createRegistrar(factory, bus -> initializeEntries.run());
+    }
+
+    private static <T, R extends DeferredRegister<T>> R createRegistrar(Function<String, R> factory, Consumer<IEventBus> initializeEntries) {
+        var registrar = factory.apply(AshsDimensions.ID);
+        INIT.add(new RegistrarEntry(registrar, initializeEntries));
+        return registrar;
+    }
+
+    private static record RegistrarEntry(DeferredRegister<?> registrar, Consumer<IEventBus> initializeEntries) {}
+}
