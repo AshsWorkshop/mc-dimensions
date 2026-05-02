@@ -18,6 +18,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviders;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.registries.datamaps.AdvancedDataMapType;
@@ -70,17 +73,21 @@ public record DepositableTime(List<HolderSet<Entry>> current, List<HolderSet<Ent
 
     private static int reduce(int identity, Stream<HolderSet<Entry>> list, BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         return list.flatMap(HolderSet::stream).filter(holder -> holder.value().predicate.test(state, level, pos, random))
-                .mapToInt(holder -> holder.value().ticks).reduce(identity, (a, b) -> Math.min(a, b));
+                .mapToInt(holder -> holder.value().ticks.sample(random)).reduce(identity, (a, b) -> Math.min(a, b));
     }
 
-    public record Entry(DepositablePredicate predicate, int ticks) {
+    public record Entry(DepositablePredicate predicate, IntProvider ticks) {
         public static final ResourceKey<Registry<Entry>> REGISTRY_KEY = IdUtils.registry("deposit_time");
 
         public static final Codec<Entry> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 DepositablePredicate.TYPE_REGISTRY.byNameCodec().dispatchMap(DepositablePredicate::codec, Function.identity()).forGetter(Entry::predicate),
-                Codec.INT.fieldOf("ticks_to_deposit").forGetter(Entry::ticks)
+                IntProviders.codec(2, 2_400_000).fieldOf("ticks_to_deposit").forGetter(Entry::ticks)
         ).apply(instance, Entry::new));
         public static final Codec<HolderSet<Entry>> LIST_CODEC = RegistryCodecs.homogeneousList(REGISTRY_KEY, DIRECT_CODEC);
+
+        public Entry(DepositablePredicate predicate, int ticks) {
+            this(predicate, ConstantInt.of(ticks));
+        }
     }
 
     public static Builder timeUntil(HolderGetter<DepositableTime.Entry> getter) {
