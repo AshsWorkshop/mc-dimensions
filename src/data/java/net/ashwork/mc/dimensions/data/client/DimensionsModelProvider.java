@@ -2,6 +2,7 @@ package net.ashwork.mc.dimensions.data.client;
 
 import net.ashwork.mc.dimensions.AshsDimensions;
 import net.ashwork.mc.dimensions.data.client.model.ExpandedItemModelGeneratorBuilder;
+import net.ashwork.mc.dimensions.registry.DimensionBlocks;
 import net.ashwork.mc.dimensions.registry.DimensionItems;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -29,6 +30,8 @@ public class DimensionsModelProvider extends ModelProvider {
         speck(itemModels, DimensionItems.GOLD_SPECK);
         speck(itemModels, DimensionItems.IRON_SPECK);
         speck(itemModels, DimensionItems.COPPER_SPECK);
+
+        blockModels.createRotatedVariantBlock(DimensionBlocks.SIFTED_SAND.value());
     }
 
     private static void speck(ItemModelGenerators itemModels, Holder<? extends Item> speck) {

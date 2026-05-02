@@ -13,4 +13,4 @@ val vanillaNeoform by extra("${vanillaMinecraft}-1")
 // - https://projects.neoforged.net/neoforged/moddevgradle
 val neoforgeGradle by extra("2.0.141")
 // - https://projects.neoforged.net/neoforged/neoforge
-val neoforgeApi by extra("${vanillaMinecraft}.31-beta")
+val neoforgeApi by extra("${vanillaMinecraft}.36-beta")

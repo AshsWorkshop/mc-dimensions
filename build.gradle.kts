@@ -1,4 +1,4 @@
-import io.github.wasabithumb.jtoml.JToml
+import groovy.json.JsonOutput
 import io.github.wasabithumb.jtoml.KToml
 import io.github.wasabithumb.jtoml.set
 import io.github.wasabithumb.jtoml.value.array.TomlArray
@@ -6,8 +6,6 @@ import io.github.wasabithumb.jtoml.value.table.TomlTable
 import org.gradle.api.Task
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.extra
-import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.provideDelegate
 import java.io.FileWriter
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -46,8 +44,42 @@ fun computeNextVersion(version: String, to: VersionPart = VersionPart.MINOR): St
     return "${versionComponents.joinToString(".")}.${toUpdate + 1}"
 }
 
-fun generateModFile(name: String = "", dependsOn: TomlTable? = null): TaskProvider<Task> {
+internal val mixins: TaskProvider<Task> = tasks.register("generateMixins") {
+    val mixinPath: String = listOf(
+        resolveProperty("mod_group").replace(".", File.separator),
+        resolveProperty("mod_subpackage"),
+        "mixin"
+    ).joinToString(File.separator)
+    val mixins: List<String> = common.allSource.filter {
+        it.path.contains(mixinPath) && !it.path.contains("package-info")
+    }.map {
+        it.path.split("$mixinPath${File.separator}").last().substringBeforeLast('.').replace(File.separator, ".")
+    }.toList()
+
+    val mixinsJson: Map<String, Any> = mapOf(
+        "required" to true,
+        "package" to "${resolveProperty("mod_group")}.${resolveProperty("mod_subpackage")}.mixin",
+        "compatibilityLevel" to "JAVA_${resolveProperty("java_version")}",
+        "mixins" to mixins,
+        "injectors" to mapOf(
+            "defaultRequire" to 1
+        ),
+        "mixinextras" to mapOf(
+            "minVersion" to "0.5.4"
+        )
+    )
+
+    val outputDir: File = layout.buildDirectory.asFile.get().resolve("generated/sources/mixins/common")
+    val filePath: File = outputDir.resolve("${resolveProperty("mod_id")}.common.mixins.json")
+    Files.createDirectories(filePath.parentFile.toPath())
+    FileWriter(filePath, StandardCharsets.UTF_8).use { it.write(JsonOutput.prettyPrint(JsonOutput.toJson(mixinsJson))) }
+    outputs.dir(outputDir)
+}
+
+fun generateModFile(name: String = "", dependency: TomlTable? = null, accessTransformers: List<String> = listOf()): TaskProvider<Task> {
     return tasks.register("generate${if (name.isEmpty()) "" else name.replaceFirstChar { it.uppercase() }}ModFile") {
+        dependsOn(mixins)
+
         // Base toml
         val modsToml = TomlTable.create()
         modsToml["license"] = resolveProperty("mod_license")
@@ -89,8 +121,28 @@ fun generateModFile(name: String = "", dependsOn: TomlTable? = null): TaskProvid
         modDependencies.add(neoForge)
 
         // Additional dependency
-        if (dependsOn != null) {
-            modDependencies.add(dependsOn)
+        if (dependency != null) {
+            modDependencies.add(dependency)
+        }
+
+        // Access transformers
+        if (accessTransformers.isNotEmpty()) {
+            val ats = TomlArray.create()
+            modsToml["accessTransformers"] = ats
+
+            accessTransformers.forEach {
+                val at = TomlTable.create()
+                at["file"] = it
+                ats.add(at)
+            }
+        }
+
+        val mixinConfigs = TomlArray.create()
+        modsToml["mixins"] = mixinConfigs
+        mixins.get().outputs.files.asFileTree.forEach {
+            val entry = TomlTable.create()
+            entry["config"] = it.path.substring(it.path.lastIndexOf(File.separator) + 1)
+            mixinConfigs.add(entry)
         }
 
         // Write to file
@@ -102,11 +154,22 @@ fun generateModFile(name: String = "", dependsOn: TomlTable? = null): TaskProvid
     }
 }
 
-internal val modFile = generateModFile()
+val transformers = sourceSets.create("transformers") {
+    java.setSrcDirs(listOf<Any>())
+}
+val interfaces = sourceSets.create("interfaces") {
+    java.setSrcDirs(listOf<Any>())
+}
+
+internal val modFile = generateModFile(accessTransformers = transformers.resources.map {
+    it.toRelativeString(transformers.resources.srcDirs.first()).replace(File.separator, "/")
+})
 
 client.resources {
     srcDir(modFile)
     source(generated.resources)
+    source(transformers.resources)
+    srcDir(mixins)
     exclude("./cache")
 }
 
@@ -117,6 +180,9 @@ neoForge {
     ideSyncTask(modFile)
 
     addModdingDependenciesTo(common)
+
+    transformers.resources.forEach { accessTransformers.from(it) }
+    interfaces.resources.forEach { interfaceInjectionData.from(it) }
 
     mods.create(resolveProperty("mod_id")) {
         sourceSets.forEach {

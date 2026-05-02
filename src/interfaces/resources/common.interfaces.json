@@ -1,0 +1,5 @@
+{
+    "net/minecraft/advancements/criterion/StatePropertiesPredicate$Builder": [
+        "net/ashwork/mc/dimensions/extensions/StatePropertiesPredicateBuilderExtension"
+    ]
+}

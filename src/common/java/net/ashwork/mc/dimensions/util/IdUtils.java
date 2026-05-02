@@ -5,6 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jspecify.annotations.Nullable;
 
@@ -18,8 +19,16 @@ public interface IdUtils {
         return id(name).toString();
     }
 
-    static <T> ResourceKey<T> resourceKey(ResourceKey<? extends Registry<T>> registry, String name) {
+    static <T> ResourceKey<Registry<T>> registry(String name) {
+        return ResourceKey.createRegistryKey(id(name));
+    }
+
+    static <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registry, String name) {
         return ResourceKey.create(registry, id(name));
+    }
+
+    static <T> TagKey<T> tag(ResourceKey<? extends Registry<T>> registry, String name) {
+        return TagKey.create(registry, id(name));
     }
 
     static ResourceKey<Recipe<?>> recipe(String name) {
@@ -27,6 +36,6 @@ public interface IdUtils {
     }
 
     static ResourceKey<Recipe<?>> recipe(String name, @Nullable String suffix) {
-        return resourceKey(Registries.RECIPE, name + (suffix != null ? "_" + suffix : ""));
+        return key(Registries.RECIPE, name + (suffix != null ? "_" + suffix : ""));
     }
 }
