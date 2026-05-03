@@ -1,5 +1,6 @@
 package net.ashwork.mc.dimensions;
 
+import net.ashwork.mc.dimensions.event.CommonEvents;
 import net.ashwork.mc.dimensions.registry.DimensionRegistrars;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -11,5 +12,6 @@ public class AshsDimensions {
 
     public AshsDimensions(IEventBus modBus) {
         DimensionRegistrars.registerEntries(modBus);
+        CommonEvents.addListeners(modBus);
     }
 }

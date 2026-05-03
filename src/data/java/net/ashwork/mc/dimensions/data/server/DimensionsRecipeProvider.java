@@ -41,6 +41,7 @@ public class DimensionsRecipeProvider extends RecipeProvider {
                 .define('P', planks)
                 .define('S', weave)
                 .pattern("P P").pattern("PSP")
+                .group(IdUtils.idString("sifter"))
                 .unlockedBy(getHasName(sifter), this.has(sifter))
                 .save(this.output);
     }

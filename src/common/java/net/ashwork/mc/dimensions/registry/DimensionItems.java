@@ -1,6 +1,7 @@
 package net.ashwork.mc.dimensions.registry;
 
-import net.ashwork.mc.dimensions.util.EventFlattener;
+import net.ashwork.mc.dimensions.event.CommonEvents;
+import net.ashwork.mc.dimensions.event.EventFlattener;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -27,12 +28,9 @@ public interface DimensionItems {
             Function.identity(), type -> ITEM.registerSimpleItem(type.name() + "_sifter")
     ));
 
-    EventFlattener<BuildCreativeModeTabContentsEvent> BUILD_TABS = new EventFlattener<>();
-
     static void register(IEventBus modBus) {
-        modBus.addListener((BuildCreativeModeTabContentsEvent event) -> BUILD_TABS.run(event));
-        BUILD_TABS.addListener(DimensionItems::ingredientsTab);
-        BUILD_TABS.addListener(DimensionItems::toolsTab);
+        CommonEvents.BUILD_TABS.add(DimensionItems::ingredientsTab)
+                .add(DimensionItems::toolsTab);
     }
 
     static void ingredientsTab(BuildCreativeModeTabContentsEvent event) {

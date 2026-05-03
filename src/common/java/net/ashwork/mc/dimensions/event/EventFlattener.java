@@ -1,7 +1,6 @@
-package net.ashwork.mc.dimensions.util;
+package net.ashwork.mc.dimensions.event;
 
 import net.neoforged.bus.api.Event;
-import net.neoforged.bus.api.IEventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +14,9 @@ public class EventFlattener<T extends Event> {
         this.listeners = new ArrayList<>();
     }
 
-    public void addListener(Consumer<T> listener) {
+    public EventFlattener<T> add(Consumer<T> listener) {
         this.listeners.add(listener);
+        return this;
     }
 
     public void run(T event) {

@@ -2,6 +2,7 @@ package net.ashwork.mc.dimensions.registry;
 
 import net.ashwork.mc.dimensions.block.SiftedBlock;
 import net.ashwork.mc.dimensions.block.SiftedSandBlock;
+import net.ashwork.mc.dimensions.event.CommonEvents;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Items;
@@ -24,7 +25,7 @@ public interface DimensionBlocks {
     );
 
     static void register(IEventBus modBus) {
-        DimensionItems.BUILD_TABS.addListener(DimensionBlocks::naturalBlocks);
+        CommonEvents.BUILD_TABS.add(DimensionBlocks::naturalBlocks);
     }
 
     static void naturalBlocks(BuildCreativeModeTabContentsEvent event) {
