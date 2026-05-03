@@ -7,15 +7,27 @@ import net.ashwork.mc.dimensions.registry.DimensionItems;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.renderer.item.properties.select.DisplayContext;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
+
+import java.util.List;
+import java.util.Set;
 
 import static net.ashwork.mc.dimensions.util.IdUtils.idString;
 
@@ -30,8 +42,39 @@ public class DimensionsModelProvider extends ModelProvider {
         speck(itemModels, DimensionItems.GOLD_SPECK);
         speck(itemModels, DimensionItems.IRON_SPECK);
         speck(itemModels, DimensionItems.COPPER_SPECK);
+        DimensionItems.SIFTERS.forEach((wood, sifter) -> sifter(itemModels, wood, sifter));
 
         blockModels.createRotatedVariantBlock(DimensionBlocks.SIFTED_SAND.value());
+    }
+
+    private static void sifter(ItemModelGenerators itemModels, WoodType wood, Holder<? extends Item> sifter) {
+        var model = Templates.SIFTER.create(
+                sifter.value(), new TextureMapping()
+                        .put(Slots.BASKET, TextureMapping.getBlockTexture(BuiltInRegistries.BLOCK.getValue(
+                                Identifier.withDefaultNamespace(wood.name() + "_planks")
+                        )))
+                        .put(Slots.WEAVE, new Material(ModelLocationUtils.decorateBlockModelLocation(idString("sifter_weave")))),
+                itemModels.modelOutput
+        );
+        var itemModel = ItemModelUtils.plainModel(model);
+        itemModels.itemModelOutput.accept(
+                sifter.value(), ItemModelUtils.select(
+                        new DisplayContext(), itemModel, ItemModelUtils.when(
+                                List.of(
+                                        ItemDisplayContext.GUI,
+                                        ItemDisplayContext.FIXED,
+                                        ItemDisplayContext.ON_SHELF
+                                ),
+                                ItemModelUtils.plainModel(
+                                        ModelTemplates.FLAT_ITEM.create(
+                                                ModelLocationUtils.getModelLocation(sifter.value(), "_flat"),
+                                                TextureMapping.layer0(sifter.value()),
+                                                itemModels.modelOutput
+                                        )
+                                )
+                        )
+                )
+        );
     }
 
     private static void speck(ItemModelGenerators itemModels, Holder<? extends Item> speck) {
@@ -47,6 +90,17 @@ public class DimensionsModelProvider extends ModelProvider {
                 .transform(ItemDisplayContext.FIXED, builder -> builder.rotation(0f, -180f, 0f))
                 .transform(ItemDisplayContext.ON_SHELF, builder -> builder.rotation(0f, -180f, 0f))
                 .build()
+        );
+    }
+
+    public interface Slots {
+        TextureSlot BASKET = TextureSlot.create("basket");
+        TextureSlot WEAVE = TextureSlot.create("weave");
+    }
+
+    public interface Templates {
+        ModelTemplate SIFTER = ModelTemplates.createItem(
+                idString("template_sifter"), Slots.BASKET, Slots.WEAVE
         );
     }
 }

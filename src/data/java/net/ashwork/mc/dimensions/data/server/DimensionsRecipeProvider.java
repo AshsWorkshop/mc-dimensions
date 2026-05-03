@@ -4,13 +4,17 @@ import net.ashwork.mc.dimensions.registry.DimensionItems;
 import net.ashwork.mc.dimensions.util.IdUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
@@ -26,6 +30,19 @@ public class DimensionsRecipeProvider extends RecipeProvider {
         this.speckToNugget(Items.GOLD_NUGGET, DimensionItems.GOLD_SPECK);
         this.speckToNugget(Items.IRON_NUGGET, DimensionItems.IRON_SPECK);
         this.speckToNugget(Items.COPPER_NUGGET, DimensionItems.COPPER_SPECK);
+        DimensionItems.SIFTERS.forEach((wood, sifter) ->
+                this.sifter(RecipeCategory.TOOLS, wood, Items.STRING, sifter));
+    }
+
+    private void sifter(RecipeCategory category, WoodType wood, ItemLike weave, Holder<? extends ItemLike> sifterHolder) {
+        ItemLike sifter = sifterHolder.value();
+        ItemLike planks = this.items.getOrThrow(ResourceKey.create(Registries.ITEM, Identifier.withDefaultNamespace(wood.name() + "_planks"))).value();
+        this.shaped(category, sifter, 1)
+                .define('P', planks)
+                .define('S', weave)
+                .pattern("P P").pattern("PSP")
+                .unlockedBy(getHasName(sifter), this.has(sifter))
+                .save(this.output);
     }
 
     private void speckToNugget(ItemLike nugget, Holder<? extends ItemLike> speck) {

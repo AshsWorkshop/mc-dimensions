@@ -22,6 +22,8 @@ public class DimensionsLanguageProvider extends LanguageProvider {
         this.item(DimensionItems.COPPER_SPECK, "Copper Speck");
 
         this.block(DimensionBlocks.SIFTED_SAND, "Sand (Sifted)");
+
+        DimensionItems.SIFTERS.values().forEach(sifter -> this.item(sifter, "Sifter"));
     }
 
     private void item(Holder<? extends Item> item, String name) {

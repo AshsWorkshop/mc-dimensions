@@ -157,7 +157,7 @@ fun generateModFile(name: String = "", dependency: TomlTable? = null, accessTran
 val transformers = sourceSets.create("transformers") {
     java.setSrcDirs(listOf<Any>())
 }
-val interfaces = sourceSets.create("interfaces") {
+val localResources = sourceSets.create("local") {
     java.setSrcDirs(listOf<Any>())
 }
 
@@ -182,7 +182,7 @@ neoForge {
     addModdingDependenciesTo(common)
 
     transformers.resources.forEach { accessTransformers.from(it) }
-    interfaces.resources.forEach { interfaceInjectionData.from(it) }
+    localResources.resources.filter { it.path.endsWith("interfaces.json") }.forEach { interfaceInjectionData.from(it) }
 
     mods.create(resolveProperty("mod_id")) {
         sourceSets.forEach {

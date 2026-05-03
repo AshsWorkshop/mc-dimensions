@@ -1,14 +1,21 @@
 package net.ashwork.mc.dimensions.registry;
 
+import net.ashwork.mc.dimensions.util.EventFlattener;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
+
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import static net.ashwork.mc.dimensions.registry.DimensionRegistrars.*;
 
 public interface DimensionItems {
@@ -16,15 +23,28 @@ public interface DimensionItems {
     DeferredItem<Item> GOLD_SPECK = ITEM.registerSimpleItem("gold_speck");
     DeferredItem<Item> IRON_SPECK = ITEM.registerSimpleItem("iron_speck");
     DeferredItem<Item> COPPER_SPECK = ITEM.registerSimpleItem("copper_speck");
+    Map<WoodType, DeferredItem<Item>> SIFTERS = WoodType.values().collect(Collectors.toUnmodifiableMap(
+            Function.identity(), type -> ITEM.registerSimpleItem(type.name() + "_sifter")
+    ));
+
+    EventFlattener<BuildCreativeModeTabContentsEvent> BUILD_TABS = new EventFlattener<>();
 
     static void register(IEventBus modBus) {
-        modBus.addListener(DimensionItems::ingredientsTab);
+        modBus.addListener((BuildCreativeModeTabContentsEvent event) -> BUILD_TABS.run(event));
+        BUILD_TABS.addListener(DimensionItems::ingredientsTab);
+        BUILD_TABS.addListener(DimensionItems::toolsTab);
     }
 
     static void ingredientsTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() != CreativeModeTabs.INGREDIENTS) return;
 
         insertBefore(event, Items.COPPER_NUGGET, COPPER_SPECK, IRON_SPECK, GOLD_SPECK);
+    }
+
+    static void toolsTab(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() != CreativeModeTabs.TOOLS_AND_UTILITIES) return;
+
+        insertBefore(event, Items.BUCKET, SIFTERS.values().toArray(Holder[]::new));
     }
 
     private static void insertBefore(BuildCreativeModeTabContentsEvent event, ItemLike last, Holder<? extends ItemLike>... items) {

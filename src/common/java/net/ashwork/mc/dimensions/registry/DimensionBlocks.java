@@ -24,7 +24,7 @@ public interface DimensionBlocks {
     );
 
     static void register(IEventBus modBus) {
-        modBus.addListener(DimensionBlocks::naturalBlocks);
+        DimensionItems.BUILD_TABS.addListener(DimensionBlocks::naturalBlocks);
     }
 
     static void naturalBlocks(BuildCreativeModeTabContentsEvent event) {
