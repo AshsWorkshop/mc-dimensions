@@ -26,13 +26,14 @@ public interface DimensionItems {
     DeferredItem<Item> GOLD_SPECK = ITEM.registerSimpleItem("gold_speck");
     DeferredItem<Item> IRON_SPECK = ITEM.registerSimpleItem("iron_speck");
     DeferredItem<Item> COPPER_SPECK = ITEM.registerSimpleItem("copper_speck");
-    Map<WoodType, DeferredItem<Item>> SIFTERS = WoodType.values().collect(Collectors.toUnmodifiableMap(
-            Function.identity(), type -> ITEM.registerItem(
-                    type.name() + "_sifter", SifterItem::new, props -> props.component(
-                            DimensionDataComponents.WOOD_VARIANT, new WoodVariant(type)
+    Map<WoodType, DeferredItem<Item>> SIFTERS = WoodType.values().filter(wood -> !wood.name().contains(":"))
+            .collect(Collectors.toUnmodifiableMap(
+                    Function.identity(), type -> ITEM.registerItem(
+                            type.name() + "_sifter", SifterItem::new, props -> props.component(
+                                    DimensionDataComponents.WOOD_VARIANT, new WoodVariant(type)
+                            )
                     )
-            )
-    ));
+            ));
 
     static void register(IEventBus modBus) {
         CommonEvents.BUILD_TABS.add(DimensionItems::ingredientsTab)

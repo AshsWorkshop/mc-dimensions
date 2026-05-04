@@ -3,7 +3,6 @@ package net.ashwork.mc.dimensions.data;
 import net.ashwork.mc.dimensions.AshsDimensions;
 import net.ashwork.mc.dimensions.data.client.DimensionsLanguageProvider;
 import net.ashwork.mc.dimensions.data.client.DimensionsModelProvider;
-import net.ashwork.mc.dimensions.data.server.AdvancementRequirementsFlipperProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionDataMapProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionDepositTimeTagsProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionsDatapackRegistries;
@@ -20,7 +19,6 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @Mod(AshsDimensions.ID)
 public class AshsDimensionsData {
@@ -43,11 +41,10 @@ public class AshsDimensionsData {
         pack.addProvider(DimensionsModelProvider::new);
 
         // Server providers
-        pack.addProvider(DimensionsRecipeProvider.Runner::new);
+        pack.addProvider(DimensionsRecipeProvider.RunnerWrapper::new);
         pack.addProvider(DimensionsItemTagsProvider::new);
         pack.addProvider(DimensionDepositTimeTagsProvider::new);
         pack.addProvider(DimensionDataMapProvider::new);
-        pack.addProvider(AdvancementRequirementsFlipperProvider::new);
     }
 
     private static record PackWrapper(DataGenerator.PackGenerator pack, CompletableFuture<HolderLookup.Provider> registries) {
