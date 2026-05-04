@@ -1,4 +1,4 @@
-package net.ashwork.mc.dimensions.extensions;
+package net.ashwork.mc.dimensions.extension;
 
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.world.level.block.state.properties.Property;

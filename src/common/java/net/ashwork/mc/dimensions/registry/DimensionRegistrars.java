@@ -6,6 +6,8 @@ import net.ashwork.mc.dimensions.storage.depositable.DepositablePredicate;
 import net.ashwork.mc.dimensions.storage.matcher.DimensionValueMatcher;
 import net.ashwork.mc.dimensions.util.ClassUtils;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -19,8 +21,11 @@ import java.util.function.Function;
 public class DimensionRegistrars {
     private static final List<RegistrarEntry> INIT = new ArrayList<>();
 
-    public static final DeferredRegister.Blocks BLOCK = createRegistrar(DeferredRegister::createBlocks, DimensionBlocks::register);
+    public static final DeferredRegister.DataComponents DATA_COMPONENT = createRegistrar(
+            modId -> DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, modId), DimensionDataComponents::register
+    );
     public static final DeferredRegister.Items ITEM = createRegistrar(DeferredRegister::createItems, DimensionItems::register);
+    public static final DeferredRegister.Blocks BLOCK = createRegistrar(DeferredRegister::createBlocks, DimensionBlocks::register);
     public static final DeferredRegister<MapCodec<? extends DepositablePredicate>> DEPOSITABLE_TYPE = createRegistrar(DepositablePredicate.TYPE_KEY, DimensionDepositables::register);
     public static final DeferredRegister<MapCodec<? extends DimensionValueMatcher>> VALUE_MATCHER = createRegistrar(DimensionValueMatcher.TYPE_KEY, DimensionValueMatchers::register);
 

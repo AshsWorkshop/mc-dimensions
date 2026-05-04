@@ -2,6 +2,8 @@ package net.ashwork.mc.dimensions.registry;
 
 import net.ashwork.mc.dimensions.event.CommonEvents;
 import net.ashwork.mc.dimensions.event.EventFlattener;
+import net.ashwork.mc.dimensions.item.SifterItem;
+import net.ashwork.mc.dimensions.item.component.WoodVariant;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -25,7 +27,11 @@ public interface DimensionItems {
     DeferredItem<Item> IRON_SPECK = ITEM.registerSimpleItem("iron_speck");
     DeferredItem<Item> COPPER_SPECK = ITEM.registerSimpleItem("copper_speck");
     Map<WoodType, DeferredItem<Item>> SIFTERS = WoodType.values().collect(Collectors.toUnmodifiableMap(
-            Function.identity(), type -> ITEM.registerSimpleItem(type.name() + "_sifter")
+            Function.identity(), type -> ITEM.registerItem(
+                    type.name() + "_sifter", SifterItem::new, props -> props.component(
+                            DimensionDataComponents.WOOD_VARIANT, new WoodVariant(type)
+                    )
+            )
     ));
 
     static void register(IEventBus modBus) {

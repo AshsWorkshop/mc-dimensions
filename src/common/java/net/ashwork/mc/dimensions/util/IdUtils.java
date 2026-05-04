@@ -3,6 +3,7 @@ package net.ashwork.mc.dimensions.util;
 import net.ashwork.mc.dimensions.AshsDimensions;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -19,6 +20,10 @@ public interface IdUtils {
         return id(name).toString();
     }
 
+    static String idPath(String name) {
+        return AshsDimensions.ID + "/" + name;
+    }
+
     static <T> ResourceKey<Registry<T>> registry(String name) {
         return ResourceKey.createRegistryKey(id(name));
     }
@@ -29,6 +34,10 @@ public interface IdUtils {
 
     static <T> TagKey<T> tag(ResourceKey<? extends Registry<T>> registry, String name) {
         return TagKey.create(registry, id(name));
+    }
+
+    static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> packet(String name) {
+        return new CustomPacketPayload.Type<>(id(name));
     }
 
     static ResourceKey<Recipe<?>> recipe(String name) {

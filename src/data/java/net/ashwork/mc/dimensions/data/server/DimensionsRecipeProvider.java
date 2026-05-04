@@ -1,7 +1,10 @@
 package net.ashwork.mc.dimensions.data.server;
 
+import net.ashwork.mc.dimensions.data.extension.RecipeBuilderExtension;
 import net.ashwork.mc.dimensions.registry.DimensionItems;
+import net.ashwork.mc.dimensions.tags.DimensionItemTags;
 import net.ashwork.mc.dimensions.util.IdUtils;
+import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -17,6 +20,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class DimensionsRecipeProvider extends RecipeProvider {
@@ -34,15 +38,26 @@ public class DimensionsRecipeProvider extends RecipeProvider {
                 this.sifter(RecipeCategory.TOOLS, wood, Items.STRING, sifter));
     }
 
+
     private void sifter(RecipeCategory category, WoodType wood, ItemLike weave, Holder<? extends ItemLike> sifterHolder) {
         ItemLike sifter = sifterHolder.value();
-        ItemLike planks = this.items.getOrThrow(ResourceKey.create(Registries.ITEM, Identifier.withDefaultNamespace(wood.name() + "_planks"))).value();
-        this.shaped(category, sifter, 1)
+        ItemLike planks = this.items.getOrThrow(ResourceKey.create(Registries.ITEM, Identifier.parse(wood.name()).withSuffix("_planks"))).value();
+        ((RecipeBuilderExtension) this.shaped(category, sifter, 1)
                 .define('P', planks)
                 .define('S', weave)
                 .pattern("P P").pattern("PSP")
                 .group(IdUtils.idString("sifter"))
                 .unlockedBy(getHasName(sifter), this.has(sifter))
+                .unlockedBy("has_any_sifter", this.has(DimensionItemTags.SIFTERS))
+                .unlockedBy(getHasName(planks), this.has(planks)))
+                .requirements(new AdvancementRequirements(List.of(
+                        List.of("has_the_recipe"),
+                        List.of(getHasName(sifter)),
+                        List.of(
+                                "has_any_sifter",
+                                getHasName(planks)
+                        )
+                )))
                 .save(this.output);
     }
 

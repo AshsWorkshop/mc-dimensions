@@ -1,5 +1,11 @@
 {
     "net/minecraft/advancements/criterion/StatePropertiesPredicate$Builder": [
-        "net/ashwork/mc/dimensions/extensions/StatePropertiesPredicateBuilderExtension"
+        "net/ashwork/mc/dimensions/extension/StatePropertiesPredicateBuilderExtension"
+    ],
+    "net/minecraft/advancements/AdvancementProgress": [
+        "net/ashwork/mc/dimensions/extension/AdvancementProgressExtension"
+    ],
+    "net/minecraft/advancements/AdvancementRequirements": [
+        "net/ashwork/mc/dimensions/extension/AdvancementRequirementsExtension"
     ]
 }

@@ -1,0 +1,8 @@
+{
+    "net/minecraft/data/recipes/RecipeUnlockAdvancementBuilder": [
+        "net/ashwork/mc/dimensions/data/extension/RecipeUnlockAdvancementBuilderExtension"
+    ],
+    "net/minecraft/data/recipes/ShapedRecipeBuilder": [
+        "net/ashwork/mc/dimensions/data/extension/RecipeBuilderExtension"
+    ]
+}

@@ -1,7 +1,7 @@
 package net.ashwork.mc.dimensions.mixin;
 
 import com.google.common.collect.ImmutableList;
-import net.ashwork.mc.dimensions.extensions.StatePropertiesPredicateBuilderExtension;
+import net.ashwork.mc.dimensions.extension.StatePropertiesPredicateBuilderExtension;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.spongepowered.asm.mixin.Final;

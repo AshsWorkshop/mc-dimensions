@@ -21,5 +21,7 @@ public class DimensionsItemTagsProvider extends ItemTagsProvider {
         this.tag(DimensionItemTags.SPECKS_IRON).add(DimensionItems.IRON_SPECK.value());
         this.tag(DimensionItemTags.SPECKS_COPPER).add(DimensionItems.COPPER_SPECK.value());
         this.tag(DimensionItemTags.SPECKS).addTags(DimensionItemTags.SPECKS_GOLD, DimensionItemTags.SPECKS_IRON, DimensionItemTags.SPECKS_COPPER);
+        var sifters = this.tag(DimensionItemTags.SIFTERS);
+        DimensionItems.SIFTERS.values().forEach(sifter -> sifters.add(sifter.value()));
     }
 }

@@ -51,7 +51,7 @@ public class DimensionsModelProvider extends ModelProvider {
         var model = Templates.SIFTER.create(
                 sifter.value(), new TextureMapping()
                         .put(Slots.BASKET, TextureMapping.getBlockTexture(BuiltInRegistries.BLOCK.getValue(
-                                Identifier.withDefaultNamespace(wood.name() + "_planks")
+                                Identifier.parse(wood.name()).withSuffix("_planks")
                         )))
                         .put(Slots.WEAVE, new Material(ModelLocationUtils.decorateBlockModelLocation(idString("sifter_weave")))),
                 itemModels.modelOutput
