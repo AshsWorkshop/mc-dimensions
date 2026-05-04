@@ -5,10 +5,15 @@ import net.ashwork.mc.dimensions.registry.DimensionDepositables;
 import net.ashwork.mc.dimensions.storage.depositable.Depositable;
 import net.ashwork.mc.dimensions.storage.depositable.DepositableTime;
 import net.ashwork.mc.dimensions.tags.DimensionDepositTimeTags;
+import net.ashwork.mc.dimensions.tags.DimensionItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.FuelValues;
 import net.neoforged.neoforge.common.data.DataMapProvider;
+import net.neoforged.neoforge.registries.datamaps.builtin.FurnaceFuel;
+import net.neoforged.neoforge.registries.datamaps.builtin.NeoForgeDataMaps;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -32,5 +37,8 @@ public class DimensionDataMapProvider extends DataMapProvider {
                                 .forAnySide(DimensionDepositTimeTags.NEAR_WATER)
                         .create(), false
                 );
+        this.builder(NeoForgeDataMaps.FURNACE_FUELS)
+                .add(DimensionItemTags.SIFTERS, new FurnaceFuel(300), false)
+                .remove(ItemTags.NON_FLAMMABLE_WOOD);
     }
 }
