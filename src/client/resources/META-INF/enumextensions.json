@@ -1,0 +1,13 @@
+{
+    "entries": [
+        {
+            "enum": "net/minecraft/client/model/HumanoidModel$ArmPose",
+            "name": "ASHSDIMENSIONS_SIFTER",
+            "constructor": "(ZZLnet/neoforged/neoforge/client/IArmPoseTransformer;)V",
+            "parameters": {
+                "class": "net/ashwork/mc/dimensions/client/neoext/ModelExtensions",
+                "field": "SIFTER_POSE"
+            }
+        }
+    ]
+}

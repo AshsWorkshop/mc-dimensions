@@ -22,6 +22,6 @@ public class ClientAdvancementsMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/advancements/AdvancementProgress;update(Lnet/minecraft/advancements/AdvancementRequirements;)V")
     )
     private void setAdvancementId(ClientboundUpdateAdvancementsPacket packet, CallbackInfo info, @Local Map.Entry<Identifier, AdvancementProgress> entry) {
-        ((AdvancementProgressExtension) entry.getValue()).setAdvancementId(entry.getKey());
+        entry.getValue().setAdvancementId(entry.getKey());
     }
 }

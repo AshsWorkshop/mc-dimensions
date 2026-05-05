@@ -79,7 +79,7 @@ fun generateMixinFile(source: SourceSet, name: String = ""): TaskProvider<Task> 
     outputs.dir(outputDir)
 }
 
-fun generateModFile(name: String = "", dependency: TomlTable? = null, accessTransformers: List<String> = listOf(), mixins: List<TaskProvider<Task>> = listOf()): TaskProvider<Task> {
+fun generateModFile(name: String = "", dependency: TomlTable? = null, accessTransformers: List<String> = listOf(), enumextensions: Boolean = false, mixins: List<TaskProvider<Task>> = listOf()): TaskProvider<Task> {
     return tasks.register("generate${if (name.isEmpty()) "" else name.replaceFirstChar { it.uppercase() }}ModFile") {
         if (mixins.isNotEmpty()) dependsOn(*mixins.toTypedArray())
 
@@ -100,6 +100,10 @@ fun generateModFile(name: String = "", dependency: TomlTable? = null, accessTran
         mod["authors"] = resolveProperty("mod_authors")
         mod["description"] = resolveProperty("mod_description")
         mods.add(mod)
+
+        if (enumextensions) {
+            mod["enumExtensions"] = "META-INF/enumextensions.json"
+        }
 
         // Mod dependencies
         val modDependencies = TomlArray.create()
@@ -169,7 +173,7 @@ internal val clientMixins = generateMixinFile(client, "client")
 internal val dataMixins = generateMixinFile(data, "data")
 internal val modFile = generateModFile(accessTransformers = transformers.resources.map {
     it.toRelativeString(transformers.resources.srcDirs.first()).replace(File.separator, "/")
-}, mixins = listOf(commonMixins, clientMixins, dataMixins))
+}, mixins = listOf(commonMixins, clientMixins, dataMixins), enumextensions = true)
 
 client.resources {
     srcDir(modFile)
