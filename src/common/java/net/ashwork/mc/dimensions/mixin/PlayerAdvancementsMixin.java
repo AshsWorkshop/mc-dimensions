@@ -17,6 +17,6 @@ public class PlayerAdvancementsMixin {
             at = @At("HEAD")
     )
     private void setAdvancementId(AdvancementHolder holder, AdvancementProgress progress, CallbackInfo info) {
-        ((AdvancementProgressExtension) progress).setAdvancementId(holder.id());
+        progress.setAdvancementId(holder.id());
     }
 }

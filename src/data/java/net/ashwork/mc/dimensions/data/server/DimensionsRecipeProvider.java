@@ -58,32 +58,24 @@ public class DimensionsRecipeProvider extends RecipeProvider {
     private void sifter(RecipeCategory category, WoodType wood, ItemLike weave, Holder<? extends ItemLike> sifterHolder) {
         ItemLike sifter = sifterHolder.value();
         ItemLike planks = this.items.getOrThrow(ResourceKey.create(Registries.ITEM, Identifier.parse(wood.name()).withSuffix("_planks"))).value();
-        withRequirements(this.shaped(category, sifter, 1)
+        this.shaped(category, sifter, 1)
                 .define('P', planks)
                 .define('S', weave)
                 .pattern("P P").pattern("PSP")
                 .group(IdUtils.idString("sifter"))
                 .unlockedBy(getHasName(sifter), this.has(sifter))
                 .unlockedBy("has_any_sifter", this.has(DimensionItemTags.SIFTERS))
-                .unlockedBy(getHasName(planks), this.has(planks)),
-                new AdvancementRequirements(List.of(
+                .unlockedBy(getHasName(planks), this.has(planks))
+                .requirements(new AdvancementRequirements(List.of(
                         List.of("has_the_recipe"),
                         List.of(getHasName(sifter)),
                         List.of(
                                 "has_any_sifter",
                                 getHasName(planks)
                         )
-                )), true, IdUtils.id("sifters"))
+                )))
+                .useOROfANDs(IdUtils.id("sifters"))
                 .save(this.output);
-    }
-
-    private static RecipeBuilder withRequirements(RecipeBuilder builder, AdvancementRequirements requirements, boolean useOROfANDs, @Nullable Identifier group) {
-        var ext = (RecipeBuilderExtension) builder;
-        ext.requirements(requirements);
-        if (useOROfANDs) {
-            ext.useOROfANDs(group);
-        }
-        return builder;
     }
 
     private void speckToNugget(ItemLike nugget, Holder<? extends ItemLike> speck) {

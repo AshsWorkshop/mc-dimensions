@@ -1,8 +1,11 @@
 package net.ashwork.mc.dimensions.extension;
 
 import net.minecraft.resources.Identifier;
+import org.apache.commons.lang3.NotImplementedException;
 
 public interface AdvancementProgressExtension {
 
-    void setAdvancementId(Identifier advancement);
+    default void setAdvancementId(Identifier advancement) {
+        throw new NotImplementedException();
+    }
 }

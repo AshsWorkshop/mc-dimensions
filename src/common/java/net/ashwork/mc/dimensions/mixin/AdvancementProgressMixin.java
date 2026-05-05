@@ -38,7 +38,7 @@ public abstract class AdvancementProgressMixin implements AdvancementProgressExt
     )
     private void checkFlip(CallbackInfoReturnable<Boolean> info) {
         if (AdvancementRequirementsFlipper.INSTANCE.shouldFlipRequirements(this.advancementId)) {
-            info.setReturnValue(((AdvancementRequirementsExtension) this.requirements).testFlip(this::isCriterionDone));
+            info.setReturnValue(this.requirements.testFlip(this::isCriterionDone));
         }
     }
 }

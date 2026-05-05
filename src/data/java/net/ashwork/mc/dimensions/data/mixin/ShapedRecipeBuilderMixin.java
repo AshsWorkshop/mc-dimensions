@@ -13,21 +13,21 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ShapedRecipeBuilder.class)
-public class ShapedRecipeBuilderMixin implements RecipeBuilderExtension {
+public class ShapedRecipeBuilderMixin implements RecipeBuilderExtension<ShapedRecipeBuilder> {
 
     @Final
     @Shadow
     private RecipeUnlockAdvancementBuilder advancementBuilder;
 
     @Override
-    public RecipeBuilder requirements(AdvancementRequirements requirements) {
-        ((RecipeUnlockAdvancementBuilderExtension) this.advancementBuilder).requirements(requirements);
+    public ShapedRecipeBuilder requirements(AdvancementRequirements requirements) {
+        this.advancementBuilder.requirements(requirements);
         return (ShapedRecipeBuilder) (Object) this;
     }
 
     @Override
-    public RecipeBuilder useOROfANDs(@Nullable Identifier group) {
-        ((RecipeUnlockAdvancementBuilderExtension) this.advancementBuilder).useOROfANDs(group);
+    public ShapedRecipeBuilder useOROfANDs(@Nullable Identifier group) {
+        this.advancementBuilder.useOROfANDs(group);
         return (ShapedRecipeBuilder) (Object) this;
     }
 }

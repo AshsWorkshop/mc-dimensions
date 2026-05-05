@@ -2,11 +2,16 @@ package net.ashwork.mc.dimensions.data.extension;
 
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.resources.Identifier;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jspecify.annotations.Nullable;
 
 public interface RecipeUnlockAdvancementBuilderExtension {
 
-    void requirements(AdvancementRequirements requirements);
+    default void requirements(AdvancementRequirements requirements) {
+        throw new NotImplementedException();
+    }
 
-    void useOROfANDs(@Nullable Identifier group);
+    default void useOROfANDs(@Nullable Identifier group) {
+        throw new NotImplementedException();
+    }
 }

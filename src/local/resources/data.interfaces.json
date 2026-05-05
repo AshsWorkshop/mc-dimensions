@@ -3,6 +3,6 @@
         "net/ashwork/mc/dimensions/data/extension/RecipeUnlockAdvancementBuilderExtension"
     ],
     "net/minecraft/data/recipes/ShapedRecipeBuilder": [
-        "net/ashwork/mc/dimensions/data/extension/RecipeBuilderExtension"
+        "net/ashwork/mc/dimensions/data/extension/RecipeBuilderExtension<net.minecraft.data.recipes.ShapedRecipeBuilder>"
     ]
 }

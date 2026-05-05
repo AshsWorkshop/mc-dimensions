@@ -2,12 +2,15 @@ package net.ashwork.mc.dimensions.extension;
 
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.world.level.block.state.properties.Property;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Optional;
 
 public interface StatePropertiesPredicateBuilderExtension {
 
-    StatePropertiesPredicate.Builder with(Property<?> property, StatePropertiesPredicate.ValueMatcher matcher);
+    default StatePropertiesPredicate.Builder with(Property<?> property, StatePropertiesPredicate.ValueMatcher matcher) {
+        throw new NotImplementedException();
+    }
 
     default StatePropertiesPredicate.Builder greaterOrEqual(Property<Integer> property, int min) {
         return this.with(property, new StatePropertiesPredicate.RangedMatcher(Optional.of(Integer.toString(min)), Optional.empty()));
