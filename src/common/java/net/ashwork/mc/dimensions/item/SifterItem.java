@@ -2,6 +2,7 @@ package net.ashwork.mc.dimensions.item;
 
 import net.ashwork.mc.dimensions.item.component.Sifting;
 import net.ashwork.mc.dimensions.item.component.WoodVariant;
+import net.ashwork.mc.dimensions.neoext.ItemExtensions;
 import net.ashwork.mc.dimensions.registry.DimensionDataComponents;
 import net.ashwork.mc.dimensions.registry.DimensionDepositables;
 import net.ashwork.mc.dimensions.storage.siftable.Siftable;
@@ -52,8 +53,7 @@ public class SifterItem extends Item {
 
     @Override
     public ItemUseAnimation getUseAnimation(ItemStack itemStack) {
-        // TODO: Replace with proper animation
-        return ItemUseAnimation.BRUSH;
+        return ItemExtensions.USE_SIFTER;
     }
 
     @Override

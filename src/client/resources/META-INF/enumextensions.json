@@ -40,6 +40,14 @@
             "parameters": [
                 -1, "ashsdimensions:in_sifter_first_person_righthand", "FIRST_PERSON_RIGHT_HAND"
             ]
+        },
+        {
+            "enum": "net/minecraft/world/item/ItemUseAnimation",
+            "name": "ASHSDIMENSIONS_SIFTER",
+            "constructor": "(ILjava/lang/String;Z)V",
+            "parameters": [
+                -1, "ashsdimensions:sifter", false
+            ]
         }
     ]
 }

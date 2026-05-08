@@ -3,10 +3,8 @@ package net.ashwork.mc.dimensions.client.neoext;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
-import it.unimi.dsi.fastutil.floats.Float2ObjectFunction;
-import net.ashwork.mc.dimensions.tags.DimensionItemTags;
+import net.ashwork.mc.dimensions.client.neoext.item.SifterClientExtension;
 import net.ashwork.mc.dimensions.util.IdUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.client.resources.model.cuboid.ItemTransform;
@@ -19,8 +17,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.common.asm.enumextension.EnumProxy;
 import net.neoforged.neoforge.client.IArmPoseTransformer;
-import net.neoforged.neoforge.client.event.RenderHandEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import org.joml.Vector3f;
 
 import java.lang.reflect.Type;
@@ -56,6 +52,11 @@ public interface ModelExtensions {
     private static void sifterPose(HumanoidModel<?> model, HumanoidRenderState renderState, HumanoidArm arm) {
         model.rightArm.xRot = -2 * Mth.PI / 6;
         model.leftArm.xRot = -2 * Mth.PI / 6;
+        if (renderState.isUsingItem) {
+            float zRot = SifterClientExtension.animation(renderState.ticksUsingItem, 10, Mth.PI / 24);
+            model.leftArm.zRot = -zRot;
+            model.rightArm.zRot = -zRot;
+        }
     }
 
     static void setup() {}
