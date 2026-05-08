@@ -1,62 +1,61 @@
 package net.ashwork.mc.dimensions.client.neoext;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
-import net.ashwork.mc.dimensions.client.AshsDimensionsClient;
-import net.ashwork.mc.dimensions.registry.DimensionItems;
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import it.unimi.dsi.fastutil.floats.Float2ObjectFunction;
 import net.ashwork.mc.dimensions.tags.DimensionItemTags;
+import net.ashwork.mc.dimensions.util.IdUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ArmedModel;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.effects.SpearAnimations;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.cuboid.ItemTransform;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwingAnimationType;
 import net.neoforged.fml.common.asm.enumextension.EnumProxy;
 import net.neoforged.neoforge.client.IArmPoseTransformer;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.joml.Vector3f;
 
-import java.util.function.Predicate;
+import java.lang.reflect.Type;
+import java.util.Map;
 
 public interface ModelExtensions {
     EnumProxy<HumanoidModel.ArmPose> SIFTER_POSE = new EnumProxy<>(
             HumanoidModel.ArmPose.class, true, true, (IArmPoseTransformer) ModelExtensions::sifterPose
     );
+    ItemDisplayContext IN_SIFTER_THIRD_PERSON_LEFTHAND = IdUtils.enumExt("in_sifter_third_person_lefthand", ItemDisplayContext::valueOf);
+    ItemDisplayContext IN_SIFTER_THIRD_PERSON_RIGHTHAND = IdUtils.enumExt("in_sifter_third_person_righthand", ItemDisplayContext::valueOf);
+    ItemDisplayContext IN_SIFTER_FIRST_PERSON_LEFTHAND = IdUtils.enumExt("in_sifter_first_person_lefthand", ItemDisplayContext::valueOf);
+    ItemDisplayContext IN_SIFTER_FIRST_PERSON_RIGHTHAND = IdUtils.enumExt("in_sifter_first_person_righthand", ItemDisplayContext::valueOf);
+    Map<ItemDisplayContext, ItemTransform> TRANSFORMS = Util.make(() -> {
+        ImmutableMap.Builder<ItemDisplayContext, ItemTransform> builder = ImmutableMap.builder();
+        var thirdPerson = createTransform(
+                new Vector3f(35f, 0f, 0f),
+                new Vector3f(-5.5f, 0.25f, 1.75f),
+                new Vector3f(0.375f, 0.375f, 0.375f)
+        );
+        builder.put(IN_SIFTER_THIRD_PERSON_LEFTHAND, thirdPerson);
+        builder.put(IN_SIFTER_THIRD_PERSON_RIGHTHAND, thirdPerson);
+        var firstPerson = createTransform(
+                new Vector3f(0f, 0f, 0f),
+                new Vector3f(-9f, 4.25f, 0f),
+                new Vector3f(0.4f, 0.4f, 0.4f)
+        );
+        builder.put(IN_SIFTER_FIRST_PERSON_LEFTHAND, firstPerson);
+        builder.put(IN_SIFTER_FIRST_PERSON_RIGHTHAND, firstPerson);
+        return builder.build();
+    });
 
     private static void sifterPose(HumanoidModel<?> model, HumanoidRenderState renderState, HumanoidArm arm) {
         model.rightArm.xRot = -2 * Mth.PI / 6;
         model.leftArm.xRot = -2 * Mth.PI / 6;
-    }
-
-    static boolean sifterItem(ArmedModel<ArmedEntityRenderState> model, Predicate<ArmedEntityRenderState> useBabyOffset, ArmedEntityRenderState state, ItemStackRenderState item, ItemStack itemStack, HumanoidArm arm, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords) {
-        // TODO: Baby offset
-        if (item.usesBlockLight()) {
-            poseStack.pushPose();
-            model.translateToHand(state, arm, poseStack);
-            boolean isLeftHand = arm == HumanoidArm.LEFT;
-            poseStack.mulPose(Axis.XP.rotationDegrees(-45.0F));
-            poseStack.mulPose(Axis.ZP.rotationDegrees((isLeftHand ? -1 : 1) * 45.0F));
-            poseStack.mulPose(Axis.YP.rotationDegrees((isLeftHand ? 1 : -1) * 192.5F));
-            poseStack.translate((isLeftHand ? 1 : -1) * 9 / 16f, 0 / 16f, -4 / 16f);
-
-            item.submit(poseStack, submitNodeCollector, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
-            poseStack.popPose();
-            return true;
-        }
-
-        return false;
     }
 
     static void setup() {
@@ -68,8 +67,8 @@ public interface ModelExtensions {
         if (
                 // If the opposite hand contains a sifter
                 getItemInOpposite(player, event.getHand()).is(DimensionItemTags.SIFTERS)
-                        // And the main hand does not already contain a sifter
-                        && !(event.getHand() == InteractionHand.MAIN_HAND && player.getItemInHand(event.getHand()).is(DimensionItemTags.SIFTERS))
+                        // And the current hand is empty
+                        && player.getItemInHand(event.getHand()).isEmpty()
         ) {
             // Cancel rendering
             event.setCanceled(true);
@@ -79,5 +78,15 @@ public interface ModelExtensions {
     private static ItemStack getItemInOpposite(Player player, InteractionHand hand) {
         hand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
         return player.getItemInHand(hand);
+    }
+
+    /**
+     * @see ItemTransform.Deserializer#deserialize(JsonElement, Type, JsonDeserializationContext) 
+     */
+    private static ItemTransform createTransform(Vector3f rotation, Vector3f translation, Vector3f scale) {
+        translation.mul(0.0625F);
+        translation.set(Mth.clamp(translation.x, -5.0F, 5.0F), Mth.clamp(translation.y, -5.0F, 5.0F), Mth.clamp(translation.z, -5.0F, 5.0F));
+        scale.set(Mth.clamp(scale.x, -4.0F, 4.0F), Mth.clamp(scale.y, -4.0F, 4.0F), Mth.clamp(scale.z, -4.0F, 4.0F));
+        return new ItemTransform(rotation, translation, scale);
     }
 }

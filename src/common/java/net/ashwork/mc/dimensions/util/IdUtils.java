@@ -10,6 +10,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Locale;
+import java.util.function.Function;
+
 public interface IdUtils {
 
     static Identifier id(String name) {
@@ -38,6 +41,10 @@ public interface IdUtils {
 
     static <T extends CustomPacketPayload> CustomPacketPayload.Type<T> packet(String name) {
         return new CustomPacketPayload.Type<>(id(name));
+    }
+
+    static <T extends Enum<T>> T enumExt(String name, Function<String, T> valueOf) {
+        return valueOf.apply((AshsDimensions.ID + "_" + name).toUpperCase(Locale.ROOT));
     }
 
     static ResourceKey<Recipe<?>> recipe(String name) {

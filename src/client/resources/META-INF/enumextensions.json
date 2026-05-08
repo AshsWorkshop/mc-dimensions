@@ -8,6 +8,38 @@
                 "class": "net/ashwork/mc/dimensions/client/neoext/ModelExtensions",
                 "field": "SIFTER_POSE"
             }
+        },
+        {
+            "enum": "net/minecraft/world/item/ItemDisplayContext",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_LEFTHAND",
+            "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+            "parameters": [
+                -1, "ashsdimensions:in_sifter_third_person_lefthand", "THIRD_PERSON_LEFT_HAND"
+            ]
+        },
+        {
+            "enum": "net/minecraft/world/item/ItemDisplayContext",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_RIGHTHAND",
+            "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+            "parameters": [
+                -1, "ashsdimensions:in_sifter_third_person_righthand", "THIRD_PERSON_RIGHT_HAND"
+            ]
+        },
+        {
+            "enum": "net/minecraft/world/item/ItemDisplayContext",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_FIRST_PERSON_LEFTHAND",
+            "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+            "parameters": [
+                -1, "ashsdimensions:in_sifter_first_person_lefthand", "FIRST_PERSON_LEFT_HAND"
+            ]
+        },
+        {
+            "enum": "net/minecraft/world/item/ItemDisplayContext",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_FIRST_PERSON_RIGHTHAND",
+            "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+            "parameters": [
+                -1, "ashsdimensions:in_sifter_first_person_righthand", "FIRST_PERSON_RIGHT_HAND"
+            ]
         }
     ]
 }
