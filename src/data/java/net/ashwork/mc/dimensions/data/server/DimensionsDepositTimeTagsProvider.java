@@ -10,9 +10,9 @@ import net.minecraft.data.tags.KeyTagProvider;
 
 import java.util.concurrent.CompletableFuture;
 
-public class DimensionDepositTimeTagsProvider extends KeyTagProvider<DepositableTime.Entry> {
+public class DimensionsDepositTimeTagsProvider extends KeyTagProvider<DepositableTime.Entry> {
 
-    public DimensionDepositTimeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+    public DimensionsDepositTimeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, DepositableTime.Entry.REGISTRY_KEY, lookupProvider, AshsDimensions.ID);
     }
 

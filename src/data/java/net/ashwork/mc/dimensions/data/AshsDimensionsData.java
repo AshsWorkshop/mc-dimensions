@@ -3,20 +3,27 @@ package net.ashwork.mc.dimensions.data;
 import net.ashwork.mc.dimensions.AshsDimensions;
 import net.ashwork.mc.dimensions.data.client.DimensionsLanguageProvider;
 import net.ashwork.mc.dimensions.data.client.DimensionsModelProvider;
-import net.ashwork.mc.dimensions.data.server.DimensionDataMapProvider;
-import net.ashwork.mc.dimensions.data.server.DimensionDepositTimeTagsProvider;
+import net.ashwork.mc.dimensions.data.server.DimensionsDataMapProvider;
+import net.ashwork.mc.dimensions.data.server.DimensionsDepositTimeTagsProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionsDatapackRegistries;
 import net.ashwork.mc.dimensions.data.server.DimensionsItemTagsProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionsRecipeProvider;
+import net.ashwork.mc.dimensions.data.server.loot.DimensionsBlockLoot;
+import net.ashwork.mc.dimensions.data.server.loot.DimensionsSiftingLoot;
+import net.ashwork.mc.dimensions.storage.siftable.Siftable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
@@ -43,8 +50,14 @@ public class AshsDimensionsData {
         // Server providers
         pack.addProvider(DimensionsRecipeProvider.RunnerWrapper::new);
         pack.addProvider(DimensionsItemTagsProvider::new);
-        pack.addProvider(DimensionDepositTimeTagsProvider::new);
-        pack.addProvider(DimensionDataMapProvider::new);
+        pack.addProvider(DimensionsDepositTimeTagsProvider::new);
+        pack.addProvider(DimensionsDataMapProvider::new);
+        pack.addProvider((output, registries) -> new LootTableProvider(
+                output, Collections.emptySet(), List.of(
+                        new LootTableProvider.SubProviderEntry(DimensionsSiftingLoot::new, Siftable.LOOT_CONTEXT),
+                        new LootTableProvider.SubProviderEntry(DimensionsBlockLoot::new, LootContextParamSets.BLOCK)
+                ), registries
+        ));
     }
 
     private static record PackWrapper(DataGenerator.PackGenerator pack, CompletableFuture<HolderLookup.Provider> registries) {

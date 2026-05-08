@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jspecify.annotations.Nullable;
 
@@ -45,6 +46,10 @@ public interface IdUtils {
 
     static <T extends Enum<T>> T enumExt(String name, Function<String, T> valueOf) {
         return valueOf.apply((AshsDimensions.ID + "_" + name).toUpperCase(Locale.ROOT));
+    }
+
+    static <T> ContextKey<T> contextKey(String name) {
+        return new ContextKey<>(id(name));
     }
 
     static ResourceKey<Recipe<?>> recipe(String name) {

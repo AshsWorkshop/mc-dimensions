@@ -3,11 +3,10 @@ package net.ashwork.mc.dimensions.client.mixin;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.ashwork.mc.dimensions.client.neoext.ModelExtensions;
-import net.ashwork.mc.dimensions.tags.DimensionItemTags;
+import net.ashwork.mc.dimensions.storage.siftable.Siftable;
 import net.minecraft.client.renderer.entity.state.ArmedEntityRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -49,14 +48,9 @@ public class ArmedEntityRenderStateMixin {
             return;
         }
 
-        boolean isRightHand = output == renderState.rightHandItemState;
-        HumanoidArm arm = (isRightHand ? HumanoidArm.RIGHT : HumanoidArm.LEFT);
-
-        // Check if the opposite hand is a sifter
-        // And the main arm isn't already holding a sifter
-        if (entity.getItemHeldByArm(arm.getOpposite()).is(DimensionItemTags.SIFTERS) && !(renderState.mainArm == arm && item.is(DimensionItemTags.SIFTERS))) {
+        if (Siftable.maybeSift(entity)) {
             instance.updateForLiving(
-                    output, item, isRightHand ? ModelExtensions.IN_SIFTER_THIRD_PERSON_RIGHTHAND : ModelExtensions.IN_SIFTER_THIRD_PERSON_LEFTHAND, entity
+                    output, item, displayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND ? ModelExtensions.IN_SIFTER_THIRD_PERSON_RIGHTHAND : ModelExtensions.IN_SIFTER_THIRD_PERSON_LEFTHAND, entity
             );
             return;
         }

@@ -58,22 +58,7 @@ public interface ModelExtensions {
         model.leftArm.xRot = -2 * Mth.PI / 6;
     }
 
-    static void setup() {
-        NeoForge.EVENT_BUS.addListener(ModelExtensions::renderHand);
-    }
-
-    private static void renderHand(RenderHandEvent event) {
-        var player = Minecraft.getInstance().player;
-        if (
-                // If the opposite hand contains a sifter
-                getItemInOpposite(player, event.getHand()).is(DimensionItemTags.SIFTERS)
-                        // And the current hand is empty
-                        && player.getItemInHand(event.getHand()).isEmpty()
-        ) {
-            // Cancel rendering
-            event.setCanceled(true);
-        }
-    }
+    static void setup() {}
 
     private static ItemStack getItemInOpposite(Player player, InteractionHand hand) {
         hand = hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;

@@ -1,6 +1,7 @@
 package net.ashwork.mc.dimensions.data.client;
 
 import net.ashwork.mc.dimensions.AshsDimensions;
+import net.ashwork.mc.dimensions.client.neoext.ModelExtensions;
 import net.ashwork.mc.dimensions.data.client.model.ExpandedItemModelGeneratorBuilder;
 import net.ashwork.mc.dimensions.registry.DimensionBlocks;
 import net.ashwork.mc.dimensions.registry.DimensionItems;
@@ -59,19 +60,20 @@ public class DimensionsModelProvider extends ModelProvider {
         var itemModel = ItemModelUtils.plainModel(model);
         itemModels.itemModelOutput.accept(
                 sifter.value(), ItemModelUtils.select(
-                        new DisplayContext(), itemModel, ItemModelUtils.when(
-                                List.of(
-                                        ItemDisplayContext.GUI,
-                                        ItemDisplayContext.FIXED,
-                                        ItemDisplayContext.ON_SHELF
-                                ),
-                                ItemModelUtils.plainModel(
-                                        ModelTemplates.FLAT_ITEM.create(
-                                                ModelLocationUtils.getModelLocation(sifter.value(), "_flat"),
-                                                TextureMapping.layer0(sifter.value()),
-                                                itemModels.modelOutput
-                                        )
+                        new DisplayContext(), ItemModelUtils.plainModel(
+                                ModelTemplates.FLAT_ITEM.create(
+                                        ModelLocationUtils.getModelLocation(sifter.value(), "_flat"),
+                                        TextureMapping.layer0(sifter.value()),
+                                        itemModels.modelOutput
                                 )
+                        ), ItemModelUtils.when(
+                                List.of(
+                                        ModelExtensions.IN_SIFTER_FIRST_PERSON_LEFTHAND,
+                                        ModelExtensions.IN_SIFTER_FIRST_PERSON_RIGHTHAND,
+                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_LEFTHAND,
+                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_RIGHTHAND
+                                ),
+                                itemModel
                         )
                 )
         );
