@@ -1,5 +1,6 @@
 package net.ashwork.mc.dimensions.data.server.loot;
 
+import net.ashwork.mc.dimensions.registry.DimensionBlocks;
 import net.ashwork.mc.dimensions.registry.DimensionItems;
 import net.ashwork.mc.dimensions.util.IdUtils;
 import net.minecraft.core.HolderLookup;
@@ -20,7 +21,15 @@ public record DimensionsSiftingLoot(HolderLookup.Provider registries) implements
     @Override
     public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {
         // TODO: Figure out what items sand can be sifted to
-        output.accept(key(Items.SAND), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1f)).add(LootItem.lootTableItem(DimensionItems.GOLD_SPECK))));
+        output.accept(
+                key(Items.SAND), LootTable.lootTable()
+                        .withPool(
+                                LootPool.lootPool().setRolls(ConstantValue.exactly(1f)).add(LootItem.lootTableItem(DimensionBlocks.SIFTED_SAND))
+                        )
+                        .withPool(
+                                LootPool.lootPool().setRolls(ConstantValue.exactly(1f)).add(LootItem.lootTableItem(DimensionItems.GOLD_SPECK))
+                        )
+        );
     }
 
     public static ResourceKey<LootTable> key(Item item) {

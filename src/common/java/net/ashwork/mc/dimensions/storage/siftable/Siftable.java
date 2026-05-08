@@ -11,19 +11,33 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextKeySet;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -47,6 +61,14 @@ public record Siftable(List<Entry> entries, Optional<ResourceKey<LootTable>> fal
 
     public Siftable(List<Entry> entries) {
         this(entries, Optional.empty());
+    }
+
+    public Optional<ResourceKey<LootTable>> use(ItemStack siftingItem) {
+        // Ignore if the sifting item is empty
+        if (siftingItem.isEmpty()) Optional.empty();
+
+        return this.entries.stream().filter(entry -> entry.predicate().test(siftingItem))
+                .findFirst().map(Entry::loot).or(() -> this.fallback);
     }
 
     public static boolean maybeSift(LivingEntity entity) {
