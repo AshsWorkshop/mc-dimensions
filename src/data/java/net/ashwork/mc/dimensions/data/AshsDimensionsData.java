@@ -3,6 +3,7 @@ package net.ashwork.mc.dimensions.data;
 import net.ashwork.mc.dimensions.AshsDimensions;
 import net.ashwork.mc.dimensions.data.client.DimensionsLanguageProvider;
 import net.ashwork.mc.dimensions.data.client.DimensionsModelProvider;
+import net.ashwork.mc.dimensions.data.client.DimensionsSoundDefinitionsProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionsDataMapProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionsDepositTimeTagsProvider;
 import net.ashwork.mc.dimensions.data.server.DimensionsDatapackRegistries;
@@ -46,6 +47,7 @@ public class AshsDimensionsData {
         // Client providers
         pack.addProvider(DimensionsLanguageProvider::new);
         pack.addProvider(DimensionsModelProvider::new);
+        pack.addProvider(DimensionsSoundDefinitionsProvider::new);
 
         // Server providers
         pack.addProvider(DimensionsRecipeProvider.RunnerWrapper::new);

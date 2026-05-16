@@ -15,6 +15,7 @@ import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.client.renderer.item.properties.select.DisplayContext;
+import net.minecraft.client.resources.model.cuboid.ItemModelGenerator;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.Holder;
@@ -43,6 +44,7 @@ public class DimensionsModelProvider extends ModelProvider {
         speck(itemModels, DimensionItems.GOLD_SPECK);
         speck(itemModels, DimensionItems.IRON_SPECK);
         speck(itemModels, DimensionItems.COPPER_SPECK);
+        shard(itemModels, DimensionItems.DIAMOND_SHARD);
         DimensionItems.SIFTERS.forEach((wood, sifter) -> sifter(itemModels, wood, sifter));
 
         blockModels.createRotatedVariantBlock(DimensionBlocks.SIFTED_SAND.value());
@@ -88,6 +90,22 @@ public class DimensionsModelProvider extends ModelProvider {
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, builder -> builder.rotation(0f, -90f, 25f).translation(1.13f, 3.2f, 3.25f).scale(0.68f, 0.68f, 0.68f))
                 .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, builder -> builder.rotation(0f, -90f, 25f).translation(1.13f, 3.2f, 3.25f).scale(0.68f, 0.68f, 0.68f))
                 .transform(ItemDisplayContext.GROUND, builder -> builder.translation(0f, 3f, 0f).scale(0.5f, 0.5f, 0.5f))
+                .transform(ItemDisplayContext.HEAD, builder -> builder.rotation(0f, -180f, 0f).translation(0f, 13f, 7f))
+                .transform(ItemDisplayContext.FIXED, builder -> builder.rotation(0f, -180f, 0f))
+                .transform(ItemDisplayContext.ON_SHELF, builder -> builder.rotation(0f, -180f, 0f))
+                .build()
+        );
+    }
+
+    private static void shard(ItemModelGenerators itemModels, Holder<? extends Item> shard) {
+        itemModels.generateFlatItem(shard.value(), ExtendedModelTemplateBuilder.builder()
+                .requiredTextureSlot(TextureSlot.LAYER0)
+                .customLoader(ExpandedItemModelGeneratorBuilder::new, loader -> loader.size(6f, 8f))
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, builder -> builder.translation(0f, 0.75f, 1f).scale(0.55f, 0.55f, 0.55f))
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND, builder -> builder.translation(0f, 0.75f, 1f).scale(0.55f, 0.55f, 0.55f))
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, builder -> builder.rotation(0f, -90f, 25f).translation(1.13f, 3.2f, 3.25f).scale(0.68f, 0.68f, 0.68f))
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND, builder -> builder.rotation(0f, -90f, 25f).translation(1.13f, 3.2f, 3.25f).scale(0.68f, 0.68f, 0.68f))
+                .transform(ItemDisplayContext.GROUND, builder -> builder.translation(0f, 2.5f, 0f).scale(0.5f, 0.5f, 0.5f))
                 .transform(ItemDisplayContext.HEAD, builder -> builder.rotation(0f, -180f, 0f).translation(0f, 13f, 7f))
                 .transform(ItemDisplayContext.FIXED, builder -> builder.rotation(0f, -180f, 0f))
                 .transform(ItemDisplayContext.ON_SHELF, builder -> builder.rotation(0f, -180f, 0f))

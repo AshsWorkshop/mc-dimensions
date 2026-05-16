@@ -9,6 +9,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
@@ -21,6 +22,7 @@ import java.util.function.Function;
 public class DimensionRegistrars {
     private static final List<RegistrarEntry> INIT = new ArrayList<>();
 
+    public static final DeferredRegister<SoundEvent> SOUND_EVENT = createRegistrar(Registries.SOUND_EVENT, DimensionSounds::register);
     public static final DeferredRegister.DataComponents DATA_COMPONENT = createRegistrar(
             modId -> DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, modId), DimensionDataComponents::register
     );

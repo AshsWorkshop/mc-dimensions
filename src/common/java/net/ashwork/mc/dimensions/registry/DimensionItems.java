@@ -26,12 +26,14 @@ public interface DimensionItems {
     DeferredItem<Item> GOLD_SPECK = ITEM.registerSimpleItem("gold_speck");
     DeferredItem<Item> IRON_SPECK = ITEM.registerSimpleItem("iron_speck");
     DeferredItem<Item> COPPER_SPECK = ITEM.registerSimpleItem("copper_speck");
+    DeferredItem<Item> DIAMOND_SHARD = ITEM.registerSimpleItem("diamond_shard");
+    // TODO: Break sound
     Map<WoodType, DeferredItem<Item>> SIFTERS = WoodType.values().filter(wood -> !wood.name().contains(":"))
             .collect(Collectors.toUnmodifiableMap(
                     Function.identity(), type -> ITEM.registerItem(
                             type.name() + "_sifter", SifterItem::new, props -> props.component(
                                     DimensionDataComponents.WOOD_VARIANT, new WoodVariant(type)
-                            )
+                            ).durability(100)
                     )
             ));
 
@@ -43,7 +45,7 @@ public interface DimensionItems {
     static void ingredientsTab(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() != CreativeModeTabs.INGREDIENTS) return;
 
-        insertBefore(event, Items.COPPER_NUGGET, COPPER_SPECK, IRON_SPECK, GOLD_SPECK);
+        insertBefore(event, Items.COPPER_NUGGET, COPPER_SPECK, IRON_SPECK, GOLD_SPECK, DIAMOND_SHARD);
     }
 
     static void toolsTab(BuildCreativeModeTabContentsEvent event) {

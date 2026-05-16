@@ -154,7 +154,6 @@ public class ExpandedItemModelGenerator extends AbstractUnbakedModel {
             endX *= xScale;
             startY *= yScale;
             endY *= yScale;
-            // TODO: Check if this is a problem
             startY = 16.0F - startY;
             endY = 16.0F - endY;
             switch (sideDirection) {

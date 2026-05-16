@@ -3,6 +3,7 @@ package net.ashwork.mc.dimensions.data.server;
 import net.ashwork.mc.dimensions.data.server.loot.DimensionsSiftingLoot;
 import net.ashwork.mc.dimensions.registry.DimensionBlocks;
 import net.ashwork.mc.dimensions.registry.DimensionDepositables;
+import net.ashwork.mc.dimensions.registry.DimensionSounds;
 import net.ashwork.mc.dimensions.storage.depositable.Depositable;
 import net.ashwork.mc.dimensions.storage.depositable.DepositableTime;
 import net.ashwork.mc.dimensions.storage.siftable.Siftable;
@@ -45,6 +46,6 @@ public class DimensionsDataMapProvider extends DataMapProvider {
                 .add(DimensionItemTags.SIFTERS, new FurnaceFuel(300), false)
                 .remove(ItemTags.NON_FLAMMABLE_WOOD);
         this.builder(Siftable.DATA_MAP)
-                .add(Items.SAND.builtInRegistryHolder(), Siftable.siftAll(DimensionsSiftingLoot.key(Items.SAND)), false);
+                .add(Items.SAND.builtInRegistryHolder(), Siftable.siftAll(DimensionsSiftingLoot.key(Items.SAND), DimensionSounds.SIFTING_SAND), false);
     }
 }

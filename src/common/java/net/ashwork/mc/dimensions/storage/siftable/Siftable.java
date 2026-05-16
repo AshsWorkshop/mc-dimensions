@@ -12,6 +12,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.world.InteractionHand;
@@ -41,10 +42,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-public record Siftable(List<Entry> entries, Optional<ResourceKey<LootTable>> fallback) {
+public record Siftable(List<Entry> entries, Optional<ResourceKey<LootTable>> fallback, Optional<Holder<SoundEvent>> sound) {
     private static final Codec<Siftable> RAW_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Entry.CODEC.listOf().fieldOf("with").forGetter(Siftable::entries),
-            LootTable.KEY_CODEC.optionalFieldOf("fallback").forGetter(Siftable::fallback)
+            LootTable.KEY_CODEC.optionalFieldOf("fallback").forGetter(Siftable::fallback),
+            SoundEvent.CODEC.optionalFieldOf("sound").forGetter(Siftable::sound)
     ).apply(instance, Siftable::new));
     public static final Codec<Siftable> CODEC = Codec.either(
             Entry.CODEC.listOf(1, Integer.MAX_VALUE), RAW_CODEC
@@ -60,7 +62,7 @@ public record Siftable(List<Entry> entries, Optional<ResourceKey<LootTable>> fal
             .required(LootContextParams.ORIGIN).required(LootContextParams.THIS_ENTITY).required(LootContextParams.TOOL).build();
 
     public Siftable(List<Entry> entries) {
-        this(entries, Optional.empty());
+        this(entries, Optional.empty(), Optional.empty());
     }
 
     public Optional<ResourceKey<LootTable>> use(ItemStack siftingItem) {
@@ -89,17 +91,19 @@ public record Siftable(List<Entry> entries, Optional<ResourceKey<LootTable>> fal
         return new Builder();
     }
 
-    public static Siftable siftAll(ResourceKey<LootTable> fallback) {
-        return new Siftable(Collections.emptyList(), Optional.of(fallback));
+    public static Siftable siftAll(ResourceKey<LootTable> fallback, Holder<SoundEvent> sound) {
+        return new Siftable(Collections.emptyList(), Optional.of(fallback), Optional.of(sound));
     }
 
     public static class Builder {
         private final ImmutableList.Builder<Entry> entries;
         private Optional<ResourceKey<LootTable>> fallback;
+        private Optional<Holder<SoundEvent>> sound;
 
         private Builder() {
             this.entries = ImmutableList.builder();
             this.fallback = Optional.empty();
+            this.sound = Optional.empty();
         }
 
         public Builder with(ResourceKey<LootTable> loot, UnaryOperator<DataComponentMatchers.Builder> builder) {
@@ -112,12 +116,17 @@ public record Siftable(List<Entry> entries, Optional<ResourceKey<LootTable>> fal
             return this;
         }
 
+        public Builder sound(Holder<SoundEvent> sound) {
+            this.sound = Optional.of(sound);
+            return this;
+        }
+
         public Siftable create() {
             var list = this.entries.build();
             if (list.isEmpty() && this.fallback.isEmpty()) {
                 throw new IllegalStateException("One loot table must be assigned to the siftable item.");
             }
-            return new Siftable(list, this.fallback);
+            return new Siftable(list, this.fallback, this.sound);
         }
     }
 }

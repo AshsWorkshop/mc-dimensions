@@ -24,6 +24,7 @@ public class DimensionsLanguageProvider extends LanguageProvider {
         this.item(DimensionItems.GOLD_SPECK, "Gold Speck");
         this.item(DimensionItems.IRON_SPECK, "Iron Speck");
         this.item(DimensionItems.COPPER_SPECK, "Copper Speck");
+        this.item(DimensionItems.DIAMOND_SHARD, "Diamond Shard");
 
         this.block(DimensionBlocks.SIFTED_SAND, "Sand (Sifted)");
 

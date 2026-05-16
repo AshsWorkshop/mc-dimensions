@@ -5,9 +5,11 @@ import net.ashwork.mc.dimensions.item.component.WoodVariant;
 import net.ashwork.mc.dimensions.neoext.ItemExtensions;
 import net.ashwork.mc.dimensions.registry.DimensionDataComponents;
 import net.ashwork.mc.dimensions.registry.DimensionDepositables;
+import net.ashwork.mc.dimensions.registry.DimensionSounds;
 import net.ashwork.mc.dimensions.storage.siftable.Siftable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -43,7 +45,7 @@ public class SifterItem extends Item {
             var lootKey = siftable.use(siftingItem);
             if (lootKey.isPresent()) {
                 var sifter = player.getItemInHand(hand);
-                sifter.set(DimensionDataComponents.SIFTING, Sifting.create(siftingItem, siftingItemHand, lootKey.get()));
+                sifter.set(DimensionDataComponents.SIFTING, Sifting.create(siftingItem, siftingItemHand, lootKey.get(), siftable.sound()));
                 player.startUsingItem(hand);
                 return InteractionResult.CONSUME.heldItemTransformedTo(sifter);
             }
@@ -68,6 +70,8 @@ public class SifterItem extends Item {
             var sifting = itemStack.get(DimensionDataComponents.SIFTING);
             if (sifting == null || !sifting.canKeepUsing(livingEntity)) {
                 livingEntity.releaseUsingItem();
+            } else if ((ticksRemaining + 1) % 10 == 0 && sifting.sound().isPresent()) {
+                level.playSound(livingEntity, livingEntity.blockPosition(), sifting.sound().get().value(), SoundSource.BLOCKS);
             }
         } else {
             livingEntity.releaseUsingItem();
@@ -85,6 +89,7 @@ public class SifterItem extends Item {
         var sifting = itemStack.get(DimensionDataComponents.SIFTING);
         if (sifting != null && level instanceof ServerLevel serverLevel) {
             sifting.finishUsingItem(itemStack, serverLevel, entity);
+            itemStack.hurtAndBreak(1, entity, sifting.slot());
         }
         itemStack.remove(DimensionDataComponents.SIFTING);
         return super.finishUsingItem(itemStack, level, entity);

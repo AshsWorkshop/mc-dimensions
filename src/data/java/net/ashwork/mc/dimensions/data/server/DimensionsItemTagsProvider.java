@@ -27,6 +27,8 @@ public class DimensionsItemTagsProvider extends ItemTagsProvider {
         this.tag(DimensionItemTags.SPECKS_IRON).add(DimensionItems.IRON_SPECK.value());
         this.tag(DimensionItemTags.SPECKS_COPPER).add(DimensionItems.COPPER_SPECK.value());
         this.tag(DimensionItemTags.SPECKS).addTags(DimensionItemTags.SPECKS_GOLD, DimensionItemTags.SPECKS_IRON, DimensionItemTags.SPECKS_COPPER);
+        this.tag(DimensionItemTags.ORE_SHARDS_DIAMOND).add(DimensionItems.DIAMOND_SHARD.value());
+        this.tag(DimensionItemTags.ORE_SHARDS).addTags(DimensionItemTags.ORE_SHARDS_DIAMOND);
         var sifters = this.tag(DimensionItemTags.SIFTERS);
         var nonFlammableWood = this.tag(ItemTags.NON_FLAMMABLE_WOOD);
         DimensionItems.SIFTERS.forEach((wood, sifter) -> {
@@ -36,5 +38,7 @@ public class DimensionsItemTagsProvider extends ItemTagsProvider {
                 nonFlammableWood.add(sifter.value());
             }
         });
+        this.tag(ItemTags.DURABILITY_ENCHANTABLE).addTags(DimensionItemTags.SIFTERS);
+        // TODO: Figure out fortune enchantment
     }
 }

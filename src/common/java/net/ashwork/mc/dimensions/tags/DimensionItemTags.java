@@ -13,6 +13,8 @@ public interface DimensionItemTags {
     TagKey<Item> SPECKS_GOLD = common("specks/gold");
     TagKey<Item> SPECKS_IRON = common("specks/iron");
     TagKey<Item> SPECKS_COPPER = common("specks/copper");
+    TagKey<Item> ORE_SHARDS = common("ore_shards");
+    TagKey<Item> ORE_SHARDS_DIAMOND = common("ore_shards/diamond");
     TagKey<Item> SIFTERS = mod("sifters");
 
     private static TagKey<Item> common(String name) {

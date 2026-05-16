@@ -50,6 +50,7 @@ public class DimensionsRecipeProvider extends RecipeProvider {
         this.speckToNugget(Items.GOLD_NUGGET, DimensionItems.GOLD_SPECK);
         this.speckToNugget(Items.IRON_NUGGET, DimensionItems.IRON_SPECK);
         this.speckToNugget(Items.COPPER_NUGGET, DimensionItems.COPPER_SPECK);
+        this.shardToItem(Items.DIAMOND, DimensionItems.DIAMOND_SHARD);
         DimensionItems.SIFTERS.forEach((wood, sifter) ->
                 this.sifter(RecipeCategory.TOOLS, wood, Items.STRING, sifter));
     }
@@ -80,6 +81,10 @@ public class DimensionsRecipeProvider extends RecipeProvider {
 
     private void speckToNugget(ItemLike nugget, Holder<? extends ItemLike> speck) {
         this.twoByTwoPacker(RecipeCategory.MISC, nugget, speck.value(), "from_speck");
+    }
+
+    private void shardToItem(ItemLike result, Holder<? extends ItemLike> shard) {
+        this.twoByTwoPacker(RecipeCategory.MISC, result, shard.value(), "from_shard");
     }
 
     private void twoByTwoPacker(RecipeCategory category, ItemLike result, ItemLike ingredient, @Nullable String suffix) {
