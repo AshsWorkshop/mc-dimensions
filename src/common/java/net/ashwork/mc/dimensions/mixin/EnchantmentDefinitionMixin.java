@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.function.Function;
 
-@Mixin(Enchantment.EnchantmentDefinition.class)
+@Mixin(value = Enchantment.EnchantmentDefinition.class, priority = 100_000)
 public class EnchantmentDefinitionMixin {
 
     @Shadow
