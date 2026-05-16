@@ -1,5 +1,6 @@
 package net.ashwork.mc.dimensions.registry;
 
+import net.ashwork.mc.dimensions.event.CommonEvents;
 import net.ashwork.mc.dimensions.storage.depositable.AtOrAboveHeightmap;
 import net.ashwork.mc.dimensions.storage.depositable.Depositable;
 import net.ashwork.mc.dimensions.storage.depositable.DepositableTime;
@@ -25,12 +26,12 @@ public interface DimensionDepositables {
     ResourceKey<DepositableTime.Entry> IS_WATERLOGGED = key("is_waterlogged");
 
     static void register(IEventBus modBus) {
-        modBus.addListener(DimensionDepositables::datapackRegistry);
+        CommonEvents.DATAPACK_REGISTRY.add(DimensionDepositables::datapackRegistry);
         modBus.addListener(DimensionDepositables::dataMap);
         modBus.addListener(DimensionDepositables::lootContext);
 
-        DEPOSITABLE_TYPE.register("block_state", () -> HasBlockState.CODEC);
-        DEPOSITABLE_TYPE.register("heightmap", () -> AtOrAboveHeightmap.CODEC);
+        registerInstance(DEPOSITABLE_TYPE, "block_state", HasBlockState.CODEC);
+        registerInstance(DEPOSITABLE_TYPE, "heightmap", AtOrAboveHeightmap.CODEC);
     }
 
     static void datapackRegistry(DataPackRegistryEvent.NewRegistry event) {

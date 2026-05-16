@@ -4,9 +4,13 @@ import net.ashwork.mc.dimensions.registry.DimensionDepositables;
 import net.ashwork.mc.dimensions.storage.depositable.AtOrAboveHeightmap;
 import net.ashwork.mc.dimensions.storage.depositable.DepositableTime;
 import net.ashwork.mc.dimensions.storage.depositable.HasBlockState;
+import net.ashwork.mc.dimensions.storage.enchantment.items.EnchantmentItemAppender;
 import net.ashwork.mc.dimensions.storage.matcher.NotMatcher;
+import net.ashwork.mc.dimensions.tags.DimensionItemTags;
+import net.ashwork.mc.dimensions.util.IdUtils;
 import net.minecraft.advancements.criterion.BlockPredicate;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -14,6 +18,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -21,7 +26,20 @@ import net.minecraft.world.level.levelgen.Heightmap;
 public interface DimensionsDatapackRegistries {
 
     static RegistrySetBuilder register(RegistrySetBuilder builder) {
-        return builder.add(DepositableTime.Entry.REGISTRY_KEY, DimensionsDatapackRegistries::depositTime);
+        return builder.add(DepositableTime.Entry.REGISTRY_KEY, DimensionsDatapackRegistries::depositTime)
+                .add(EnchantmentItemAppender.REGISTRY_KEY, DimensionsDatapackRegistries::enchantmentItemAppenders);
+    }
+
+    static void enchantmentItemAppenders(BootstrapContext<EnchantmentItemAppender> bootstrap) {
+        var enchantments = bootstrap.lookup(Registries.ENCHANTMENT);
+        var items = bootstrap.lookup(Registries.ITEM);
+
+        bootstrap.register(
+                IdUtils.key(EnchantmentItemAppender.REGISTRY_KEY, "fortune"), new EnchantmentItemAppender(
+                        HolderSet.direct(enchantments.getOrThrow(Enchantments.FORTUNE)),
+                        items.getOrThrow(DimensionItemTags.ENCHANTABLE_FORTUNE)
+                )
+        );
     }
 
     static void depositTime(BootstrapContext<DepositableTime.Entry> bootstrap) {

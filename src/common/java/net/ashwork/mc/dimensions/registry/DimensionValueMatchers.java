@@ -7,6 +7,6 @@ import static net.ashwork.mc.dimensions.registry.DimensionRegistrars.*;
 public interface DimensionValueMatchers {
 
     static void register() {
-        VALUE_MATCHER.register("not", () -> NotMatcher.CODEC);
+        registerInstance(VALUE_MATCHER,"not", NotMatcher.CODEC);
     }
 }

@@ -17,6 +17,8 @@ public interface DimensionItemTags {
     TagKey<Item> ORE_SHARDS_DIAMOND = common("ore_shards/diamond");
     TagKey<Item> SIFTERS = mod("sifters");
 
+    TagKey<Item> ENCHANTABLE_FORTUNE = mod("enchantable/fortune");
+
     private static TagKey<Item> common(String name) {
         return ItemTags.create(Identifier.fromNamespaceAndPath("c", name));
     }

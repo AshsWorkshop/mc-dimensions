@@ -32,7 +32,7 @@ public interface DimensionItems {
                     Function.identity(), type -> ITEM.registerItem(
                             type.name() + "_sifter", SifterItem::new, props -> props.component(
                                     DimensionDataComponents.WOOD_VARIANT, new WoodVariant(type)
-                            ).durability(100)
+                            ).durability(100).enchantable(1)
                     )
             ));
 

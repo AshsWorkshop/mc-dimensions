@@ -39,6 +39,6 @@ public class DimensionsItemTagsProvider extends ItemTagsProvider {
             }
         });
         this.tag(ItemTags.DURABILITY_ENCHANTABLE).addTags(DimensionItemTags.SIFTERS);
-        // TODO: Figure out fortune enchantment
+        this.tag(DimensionItemTags.ENCHANTABLE_FORTUNE).addTags(DimensionItemTags.SIFTERS);
     }
 }

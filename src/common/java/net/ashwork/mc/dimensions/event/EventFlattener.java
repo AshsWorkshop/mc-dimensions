@@ -10,8 +10,9 @@ public class EventFlattener<T extends Event> {
 
     private final List<Consumer<T>> listeners;
 
-    public EventFlattener() {
+    public EventFlattener(Consumer<T>... listeners) {
         this.listeners = new ArrayList<>();
+        for (var listener : listeners) this.listeners.add(listener);
     }
 
     public EventFlattener<T> add(Consumer<T> listener) {

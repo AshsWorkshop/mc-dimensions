@@ -1,6 +1,7 @@
 package net.ashwork.mc.dimensions;
 
 import net.ashwork.mc.dimensions.event.CommonEvents;
+import net.ashwork.mc.dimensions.event.ServerEvents;
 import net.ashwork.mc.dimensions.network.PayloadRegistrar;
 import net.ashwork.mc.dimensions.registry.DimensionRegistrars;
 import net.ashwork.mc.dimensions.resources.DimensionResources;
@@ -15,6 +16,7 @@ public class AshsDimensions {
     public AshsDimensions(IEventBus modBus) {
         DimensionRegistrars.registerEntries(modBus);
         CommonEvents.addListeners(modBus);
+        ServerEvents.addListeners();
         DimensionResources.setup();
         PayloadRegistrar.register(modBus);
     }

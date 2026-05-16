@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
@@ -30,6 +31,11 @@ public class DimensionRegistrars {
     public static final DeferredRegister.Blocks BLOCK = createRegistrar(DeferredRegister::createBlocks, DimensionBlocks::register);
     public static final DeferredRegister<MapCodec<? extends DepositablePredicate>> DEPOSITABLE_TYPE = createRegistrar(DepositablePredicate.TYPE_KEY, DimensionDepositables::register);
     public static final DeferredRegister<MapCodec<? extends DimensionValueMatcher>> VALUE_MATCHER = createRegistrar(DimensionValueMatcher.TYPE_KEY, DimensionValueMatchers::register);
+    public static final DeferredRegister<MapCodec<? extends NumberProvider>> NUMBER_PROVIDER = createRegistrar(Registries.LOOT_NUMBER_PROVIDER_TYPE, DimensionNumberProviders::register);
+
+    static <T> void registerInstance(DeferredRegister<T> registrar, String name, T instance) {
+        registrar.register(name, () -> instance);
+    }
 
     private DimensionRegistrars() {
         ClassUtils.doNotInstantiate(this);
