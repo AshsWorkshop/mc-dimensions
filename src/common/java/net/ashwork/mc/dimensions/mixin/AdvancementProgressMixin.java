@@ -1,7 +1,6 @@
 package net.ashwork.mc.dimensions.mixin;
 
 import net.ashwork.mc.dimensions.extension.AdvancementProgressExtension;
-import net.ashwork.mc.dimensions.extension.AdvancementRequirementsExtension;
 import net.ashwork.mc.dimensions.resources.AdvancementRequirementsFlipper;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -27,7 +26,7 @@ public abstract class AdvancementProgressMixin implements AdvancementProgressExt
     abstract boolean isCriterionDone(String criterion);
 
     @Override
-    public void setAdvancementId(Identifier advancement) {
+    public void ashsdimensions$setAdvancementId(Identifier advancement) {
         this.advancementId = advancement;
     }
 
@@ -38,7 +37,7 @@ public abstract class AdvancementProgressMixin implements AdvancementProgressExt
     )
     private void checkFlip(CallbackInfoReturnable<Boolean> info) {
         if (AdvancementRequirementsFlipper.INSTANCE.shouldFlipRequirements(this.advancementId)) {
-            info.setReturnValue(this.requirements.testFlip(this::isCriterionDone));
+            info.setReturnValue(this.requirements.ashsdimensions$testFlip(this::isCriterionDone));
         }
     }
 }

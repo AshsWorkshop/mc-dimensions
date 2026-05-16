@@ -1,7 +1,6 @@
 package net.ashwork.mc.dimensions.data.server;
 
 import com.google.common.collect.Sets;
-import net.ashwork.mc.dimensions.data.extension.RecipeBuilderExtension;
 import net.ashwork.mc.dimensions.registry.DimensionItems;
 import net.ashwork.mc.dimensions.resources.AdvancementRequirementsFlipper;
 import net.ashwork.mc.dimensions.tags.DimensionItemTags;
@@ -23,12 +22,10 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.neoforged.neoforge.common.conditions.ICondition;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -67,7 +64,7 @@ public class DimensionsRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(sifter), this.has(sifter))
                 .unlockedBy("has_any_sifter", this.has(DimensionItemTags.SIFTERS))
                 .unlockedBy(getHasName(planks), this.has(planks))
-                .requirements(new AdvancementRequirements(List.of(
+                .ashsdimensions$requirements(new AdvancementRequirements(List.of(
                         List.of("has_the_recipe"),
                         List.of(getHasName(sifter)),
                         List.of(
@@ -75,7 +72,7 @@ public class DimensionsRecipeProvider extends RecipeProvider {
                                 getHasName(planks)
                         )
                 )))
-                .useOROfANDs(IdUtils.id("sifters"))
+                .ashsdimensions$useOROfANDs(IdUtils.id("sifters"))
                 .save(this.output);
     }
 

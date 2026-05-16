@@ -32,12 +32,12 @@ public class RecipeUnlockAdvancementBuilderMixin implements RecipeUnlockAdvancem
     private Identifier group;
 
     @Override
-    public void requirements(AdvancementRequirements requirements) {
+    public void ashsdimensions$requirements(AdvancementRequirements requirements) {
         this.requirements = requirements;
     }
 
     @Override
-    public void useOROfANDs(@Nullable Identifier group) {
+    public void ashsdimensions$useOROfANDs(@Nullable Identifier group) {
         this.group = group;
         this.useOROfANDs = true;
     }

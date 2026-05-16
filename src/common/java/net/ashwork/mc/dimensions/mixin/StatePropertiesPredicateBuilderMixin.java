@@ -16,7 +16,7 @@ public class StatePropertiesPredicateBuilderMixin implements StatePropertiesPred
     private ImmutableList.Builder<StatePropertiesPredicate.PropertyMatcher> matchers;
 
     @Override
-    public StatePropertiesPredicate.Builder with(Property<?> property, StatePropertiesPredicate.ValueMatcher matcher) {
+    public StatePropertiesPredicate.Builder ashsdimensions$with(Property<?> property, StatePropertiesPredicate.ValueMatcher matcher) {
         this.matchers.add(new StatePropertiesPredicate.PropertyMatcher(property.getName(), matcher));
         return (StatePropertiesPredicate.Builder) (Object) this;
     }

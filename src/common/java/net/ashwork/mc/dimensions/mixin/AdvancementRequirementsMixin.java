@@ -17,7 +17,7 @@ public class AdvancementRequirementsMixin implements AdvancementRequirementsExte
     private List<List<String>> requirements;
 
     @Override
-    public boolean testFlip(Predicate<String> predicate) {
+    public boolean ashsdimensions$testFlip(Predicate<String> predicate) {
         if (this.requirements.isEmpty()) {
             return false;
         } else {

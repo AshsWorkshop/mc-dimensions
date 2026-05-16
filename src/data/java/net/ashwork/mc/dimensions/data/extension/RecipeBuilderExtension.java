@@ -8,15 +8,15 @@ import org.jspecify.annotations.Nullable;
 
 public interface RecipeBuilderExtension<BUILDER extends RecipeBuilder> {
 
-    default BUILDER requirements(AdvancementRequirements requirements) {
+    default BUILDER ashsdimensions$requirements(AdvancementRequirements requirements) {
         throw new NotImplementedException();
     }
 
-    default BUILDER useOROfANDs() {
-        return this.useOROfANDs(null);
+    default BUILDER ashsdimensions$useOROfANDs() {
+        return this.ashsdimensions$useOROfANDs(null);
     }
 
-    default BUILDER useOROfANDs(@Nullable Identifier group) {
+    default BUILDER ashsdimensions$useOROfANDs(@Nullable Identifier group) {
         throw new NotImplementedException();
     }
 }

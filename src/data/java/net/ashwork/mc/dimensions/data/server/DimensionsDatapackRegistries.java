@@ -61,7 +61,7 @@ public interface DimensionsDatapackRegistries {
         ));
         bootstrap.register(DimensionDepositables.IS_WATER_FLOWING, new DepositableTime.Entry(
                 new HasBlockState(BlockPredicate.Builder.block().of(blocks, Blocks.WATER).setProperties(
-                        StatePropertiesPredicate.Builder.properties().with(BlockStateProperties.LEVEL, new NotMatcher(
+                        StatePropertiesPredicate.Builder.properties().ashsdimensions$with(BlockStateProperties.LEVEL, new NotMatcher(
                                 new StatePropertiesPredicate.ExactMatcher(Integer.toString(0))
                         ))
                 ).build()),

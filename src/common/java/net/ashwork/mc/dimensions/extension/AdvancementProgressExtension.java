@@ -5,7 +5,7 @@ import org.apache.commons.lang3.NotImplementedException;
 
 public interface AdvancementProgressExtension {
 
-    default void setAdvancementId(Identifier advancement) {
+    default void ashsdimensions$setAdvancementId(Identifier advancement) {
         throw new NotImplementedException();
     }
 }

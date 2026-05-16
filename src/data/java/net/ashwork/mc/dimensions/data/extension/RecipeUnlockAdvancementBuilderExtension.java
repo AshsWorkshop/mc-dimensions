@@ -7,11 +7,11 @@ import org.jspecify.annotations.Nullable;
 
 public interface RecipeUnlockAdvancementBuilderExtension {
 
-    default void requirements(AdvancementRequirements requirements) {
+    default void ashsdimensions$requirements(AdvancementRequirements requirements) {
         throw new NotImplementedException();
     }
 
-    default void useOROfANDs(@Nullable Identifier group) {
+    default void ashsdimensions$useOROfANDs(@Nullable Identifier group) {
         throw new NotImplementedException();
     }
 }

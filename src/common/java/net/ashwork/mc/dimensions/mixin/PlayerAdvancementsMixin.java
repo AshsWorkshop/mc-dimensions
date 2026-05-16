@@ -1,6 +1,5 @@
 package net.ashwork.mc.dimensions.mixin;
 
-import net.ashwork.mc.dimensions.extension.AdvancementProgressExtension;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.server.PlayerAdvancements;
@@ -17,6 +16,6 @@ public class PlayerAdvancementsMixin {
             at = @At("HEAD")
     )
     private void setAdvancementId(AdvancementHolder holder, AdvancementProgress progress, CallbackInfo info) {
-        progress.setAdvancementId(holder.id());
+        progress.ashsdimensions$setAdvancementId(holder.id());
     }
 }
