@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 
 // TODO: Actually implement
+// Texture/model off of mulga snake
 // Want to make each segment of the snake trail behind dynamically rather than an animation
 public class Snake extends Animal {
 
