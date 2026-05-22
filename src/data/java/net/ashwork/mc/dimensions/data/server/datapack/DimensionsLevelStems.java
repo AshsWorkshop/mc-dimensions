@@ -60,7 +60,10 @@ public interface DimensionsLevelStems {
                                                 DensityFunctions.zero(),
                                                 DensityFunctions.zero(),
                                                 DensityFunctions.zero(),
-                                                DensityFunctions.zero(),
+                                                // TODO: Controls where blocks are placed?
+                                                // Positive number seems to be place based on surface rules
+                                                // Zero means use air
+                                                DensityFunctions.constant(1),
                                                 DensityFunctions.zero(),
                                                 DensityFunctions.zero(),
                                                 DensityFunctions.zero()
