@@ -16,6 +16,7 @@ public interface DimensionItemTags {
     TagKey<Item> ORE_SHARDS = common("ore_shards");
     TagKey<Item> ORE_SHARDS_DIAMOND = common("ore_shards/diamond");
     TagKey<Item> SIFTERS = mod("sifters");
+    TagKey<Item> FOOD_SNAKE = mod("food/snake");
 
     TagKey<Item> ENCHANTABLE_FORTUNE = mod("enchantable/fortune");
 

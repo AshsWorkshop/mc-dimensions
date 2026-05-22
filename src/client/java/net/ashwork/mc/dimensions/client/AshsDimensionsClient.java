@@ -1,6 +1,7 @@
 package net.ashwork.mc.dimensions.client;
 
 import net.ashwork.mc.dimensions.AshsDimensions;
+import net.ashwork.mc.dimensions.client.entity.EntityRenderers;
 import net.ashwork.mc.dimensions.client.model.ExpandedItemModelGeneratorLoader;
 import net.ashwork.mc.dimensions.client.neoext.ClientExtensions;
 import net.ashwork.mc.dimensions.client.neoext.ModelExtensions;
@@ -22,6 +23,7 @@ public class AshsDimensionsClient {
     public AshsDimensionsClient(IEventBus modBus) {
         ClientExtensions.register(modBus);
         ClientPayloadRegistrar.register(modBus);
+        EntityRenderers.register(modBus);
         ModelExtensions.setup();
         modBus.addListener(AshsDimensionsClient::registerLoaders);
     }
