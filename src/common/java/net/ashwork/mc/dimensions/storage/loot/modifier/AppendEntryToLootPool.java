@@ -21,8 +21,8 @@ public class AppendEntryToLootPool extends AbstractLootTableModifier {
 
     public static final MapCodec<AppendEntryToLootPool> CODEC = RecordCodecBuilder.mapCodec(instance -> codecStart(instance)
             .and(instance.group(
-                    SerializationUtils.setOf(LootTable.KEY_CODEC).fieldOf("tables").forGetter(ltm -> ltm.tables),
-                    LootPoolEntries.CODEC.listOf().fieldOf("entries").forGetter(ltm -> ltm.entries)
+                    SerializationUtils.singleOrSet(LootTable.KEY_CODEC, 1).fieldOf("tables").forGetter(ltm -> ltm.tables),
+                    LootPoolEntries.CODEC.listOf(1, Integer.MAX_VALUE).fieldOf("entries").forGetter(ltm -> ltm.entries)
             )).apply(instance, AppendEntryToLootPool::new)
     );
 
