@@ -15,6 +15,24 @@ import org.jspecify.annotations.Nullable;
 // TODO: Actually implement
 // Texture/model off of mulga snake
 // Want to make each segment of the snake trail behind dynamically rather than an animation
+//Minecraft snake
+//- Flicks tongue
+//	- Slow controlled flicks that it's inspecting surroundings
+//        - Fast, short flicks that it's focusing on something
+//        - Yawning
+//	- Gather particles to smell more
+//- Head wiggling
+//	- Happens every now and then
+//	- Seeing something new
+//        - Changing eye color
+//	- As eyes become paler, shedding becomes closer
+//- Coils into an s shape
+//	- If head coils into an S, it's positioning to strike
+//        - Generally move away when approached
+//	- Only react when cornered
+//- Either lay eggs, or give birth to live yong
+//- Move slower at cool temperatures (50F)
+//- Eat small animals
 public class Snake extends Animal {
 
     public Snake(EntityType<? extends Animal> type, Level level) {
