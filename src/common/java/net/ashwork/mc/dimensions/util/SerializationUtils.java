@@ -1,5 +1,7 @@
 package net.ashwork.mc.dimensions.util;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Keyable;
@@ -8,6 +10,7 @@ import net.ashwork.mc.dimensions.serialization.DimensionSimpleMapCodec;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public interface SerializationUtils {
@@ -21,5 +24,9 @@ public interface SerializationUtils {
 
     static <K, V> MapCodec<Map<K, V>> simpleMap(Codec<K> keyCodec, Codec<V> elementCodec, Keyable keys) {
         return new DimensionSimpleMapCodec<>(keyCodec, elementCodec, keys);
+    }
+
+    static <A> Codec<Set<A>> setOf(Codec<A> elementCodec) {
+        return elementCodec.listOf().xmap(ImmutableSet::copyOf, ImmutableList::copyOf);
     }
 }

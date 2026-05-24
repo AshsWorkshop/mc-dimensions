@@ -5,6 +5,7 @@ import net.ashwork.mc.dimensions.storage.depositable.AtOrAboveHeightmap;
 import net.ashwork.mc.dimensions.storage.depositable.DepositableTime;
 import net.ashwork.mc.dimensions.storage.depositable.HasBlockState;
 import net.ashwork.mc.dimensions.storage.enchantment.items.EnchantmentItemAppender;
+import net.ashwork.mc.dimensions.storage.loot.modifier.LootTableModifier;
 import net.ashwork.mc.dimensions.storage.matcher.NotMatcher;
 import net.ashwork.mc.dimensions.tags.DimensionItemTags;
 import net.ashwork.mc.dimensions.util.IdUtils;
@@ -31,6 +32,7 @@ public interface DimensionsDatapackRegistries {
                 .add(EnchantmentItemAppender.REGISTRY_KEY, EnchantmentItemAppenders::register)
                 .add(Registries.BIOME, DimensionsBiomes::register)
                 .add(Registries.DIMENSION_TYPE, DimensionsDimensionTypes::register)
-                .add(Registries.LEVEL_STEM, DimensionsLevelStems::register);
+                .add(Registries.LEVEL_STEM, DimensionsLevelStems::register)
+                .add(LootTableModifier.REGISTRY_KEY, DimensionsLootTableModifiers::register);
     }
 }

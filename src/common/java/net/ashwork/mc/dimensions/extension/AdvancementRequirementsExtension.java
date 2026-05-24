@@ -1,12 +1,12 @@
 package net.ashwork.mc.dimensions.extension;
 
-import org.apache.commons.lang3.NotImplementedException;
+import net.ashwork.mc.dimensions.util.ClassUtils;
 
 import java.util.function.Predicate;
 
 public interface AdvancementRequirementsExtension {
 
     default boolean ashsdimensions$testFlip(Predicate<String> predicate) {
-        throw new NotImplementedException();
+        return ClassUtils.extensionDefault();
     }
 }

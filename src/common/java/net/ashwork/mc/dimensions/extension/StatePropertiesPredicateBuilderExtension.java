@@ -1,5 +1,6 @@
 package net.ashwork.mc.dimensions.extension;
 
+import net.ashwork.mc.dimensions.util.ClassUtils;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.apache.commons.lang3.NotImplementedException;
@@ -9,7 +10,7 @@ import java.util.Optional;
 public interface StatePropertiesPredicateBuilderExtension {
 
     default StatePropertiesPredicate.Builder ashsdimensions$with(Property<?> property, StatePropertiesPredicate.ValueMatcher matcher) {
-        throw new NotImplementedException();
+        return ClassUtils.extensionDefault();
     }
 
     default StatePropertiesPredicate.Builder ashsdimensions$greaterOrEqual(Property<Integer> property, int min) {

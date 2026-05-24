@@ -3,13 +3,14 @@ package net.ashwork.mc.dimensions.registry;
 import com.mojang.serialization.MapCodec;
 import net.ashwork.mc.dimensions.AshsDimensions;
 import net.ashwork.mc.dimensions.storage.depositable.DepositablePredicate;
+import net.ashwork.mc.dimensions.storage.loot.modifier.LootTableModifier;
 import net.ashwork.mc.dimensions.storage.matcher.DimensionValueMatcher;
 import net.ashwork.mc.dimensions.util.ClassUtils;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -33,6 +34,8 @@ public class DimensionRegistrars {
     public static final DeferredRegister<MapCodec<? extends DimensionValueMatcher>> VALUE_MATCHER = createRegistrar(DimensionValueMatcher.TYPE_KEY, DimensionValueMatchers::register);
     public static final DeferredRegister<MapCodec<? extends NumberProvider>> NUMBER_PROVIDER = createRegistrar(Registries.LOOT_NUMBER_PROVIDER_TYPE, DimensionNumberProviders::register);
     public static final DeferredRegister.Entities ENTITY = createRegistrar(DeferredRegister::createEntities, DimensionEntities::register);
+    public static final DeferredRegister<MapCodec<? extends LootTableModifier>> LOOT_TABLE_MODIFIER_TYPE = createRegistrar(LootTableModifier.TYPE_KEY, DimensionLootTables::register);
+    public static final DeferredRegister<MapCodec<? extends LootPoolEntryContainer>> LOOT_POOL_ENTRY_TYPE = createRegistrar(Registries.LOOT_POOL_ENTRY_TYPE);
 
     static <T> void registerInstance(DeferredRegister<T> registrar, String name, T instance) {
         registrar.register(name, () -> instance);
@@ -56,6 +59,11 @@ public class DimensionRegistrars {
     private static void newRegistry(NewRegistryEvent event) {
         event.register(DepositablePredicate.TYPE_REGISTRY);
         event.register(DimensionValueMatcher.TYPE_REGISTRY);
+        event.register(LootTableModifier.TYPE_REGISTRY);
+    }
+
+    private static <T> DeferredRegister<T> createRegistrar(ResourceKey<? extends Registry<T>> key) {
+        return createRegistrar(modId -> DeferredRegister.create(key, modId), () -> {});
     }
 
     private static <T> DeferredRegister<T> createRegistrar(ResourceKey<? extends Registry<T>> key, Runnable initializeEntries) {
