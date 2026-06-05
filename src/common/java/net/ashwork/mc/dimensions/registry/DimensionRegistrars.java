@@ -10,6 +10,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.bus.api.IEventBus;
@@ -36,6 +37,7 @@ public class DimensionRegistrars {
     public static final DeferredRegister.Entities ENTITY = createRegistrar(DeferredRegister::createEntities, DimensionEntities::register);
     public static final DeferredRegister<MapCodec<? extends LootTableModifier>> LOOT_TABLE_MODIFIER_TYPE = createRegistrar(LootTableModifier.TYPE_KEY, DimensionLootTables::register);
     public static final DeferredRegister<MapCodec<? extends LootPoolEntryContainer>> LOOT_POOL_ENTRY_TYPE = createRegistrar(Registries.LOOT_POOL_ENTRY_TYPE);
+    public static final DeferredRegister<MapCodec<? extends Block>> BLOCK_TYPE = createRegistrar(Registries.BLOCK_TYPE);
 
     static <T> void registerInstance(DeferredRegister<T> registrar, String name, T instance) {
         registrar.register(name, () -> instance);

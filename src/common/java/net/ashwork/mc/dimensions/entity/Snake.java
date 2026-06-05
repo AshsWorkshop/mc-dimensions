@@ -15,6 +15,7 @@ import org.jspecify.annotations.Nullable;
 // TODO: Actually implement
 // Texture/model off of mulga snake
 // Want to make each segment of the snake trail behind dynamically rather than an animation
+// - Using part entities for this? Modifying position and rotation relative to the previous part
 //Minecraft snake
 //- Flicks tongue
 //	- Slow controlled flicks that it's inspecting surroundings

@@ -72,8 +72,10 @@ public class DimensionsModelProvider extends ModelProvider {
                                 List.of(
                                         ModelExtensions.IN_SIFTER_FIRST_PERSON_LEFTHAND,
                                         ModelExtensions.IN_SIFTER_FIRST_PERSON_RIGHTHAND,
-                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_LEFTHAND,
-                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_RIGHTHAND
+                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_LEFTHAND_DEFAULT,
+                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_LEFTHAND_SLIM,
+                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_RIGHTHAND_DEFAULT,
+                                        ModelExtensions.IN_SIFTER_THIRD_PERSON_RIGHTHAND_SLIM
                                 ),
                                 itemModel
                         )

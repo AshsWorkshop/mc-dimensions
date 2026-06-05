@@ -206,8 +206,12 @@ neoForge {
     }
 
     runs {
-        create("client") {
+        create("clientSlim") {
             client()
+        }
+        create("clientDefault") {
+            client()
+            programArguments.addAll("--username", "Steve")
         }
         create("server") {
             server()

@@ -3,6 +3,7 @@ package net.ashwork.mc.dimensions.client.neoext.item;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.ashwork.mc.dimensions.client.neoext.ModelExtensions;
 import net.ashwork.mc.dimensions.neoext.ItemExtensions;
+import net.ashwork.mc.dimensions.storage.siftable.Siftable;
 import net.ashwork.mc.dimensions.tags.DimensionItemTags;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
@@ -20,7 +21,7 @@ public record SifterClientExtension() implements IClientItemExtensions {
 
     @Override
     public HumanoidModel.@Nullable ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
-        return itemStack.is(DimensionItemTags.SIFTERS) ? ModelExtensions.SIFTER_POSE.getValue()
+        return Siftable.maybeSift(entityLiving) ? ModelExtensions.SIFTER_POSE.getValue()
                 : IClientItemExtensions.super.getArmPose(entityLiving, hand, itemStack);
     }
 

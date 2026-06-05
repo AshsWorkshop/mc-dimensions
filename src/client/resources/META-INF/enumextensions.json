@@ -11,18 +11,34 @@
         },
         {
             "enum": "net/minecraft/world/item/ItemDisplayContext",
-            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_LEFTHAND",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_LEFTHAND_DEFAULT",
             "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
             "parameters": [
-                -1, "ashsdimensions:in_sifter_third_person_lefthand", "THIRD_PERSON_LEFT_HAND"
+                -1, "ashsdimensions:in_sifter_third_person_lefthand_default", "THIRD_PERSON_LEFT_HAND"
             ]
         },
         {
             "enum": "net/minecraft/world/item/ItemDisplayContext",
-            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_RIGHTHAND",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_RIGHTHAND_DEFAULT",
             "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
             "parameters": [
-                -1, "ashsdimensions:in_sifter_third_person_righthand", "THIRD_PERSON_RIGHT_HAND"
+                -1, "ashsdimensions:in_sifter_third_person_righthand_default", "THIRD_PERSON_RIGHT_HAND"
+            ]
+        },
+        {
+            "enum": "net/minecraft/world/item/ItemDisplayContext",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_LEFTHAND_SLIM",
+            "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+            "parameters": [
+                -1, "ashsdimensions:in_sifter_third_person_lefthand_slim", "THIRD_PERSON_LEFT_HAND"
+            ]
+        },
+        {
+            "enum": "net/minecraft/world/item/ItemDisplayContext",
+            "name": "ASHSDIMENSIONS_IN_SIFTER_THIRD_PERSON_RIGHTHAND_SLIM",
+            "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+            "parameters": [
+                -1, "ashsdimensions:in_sifter_third_person_righthand_slim", "THIRD_PERSON_RIGHT_HAND"
             ]
         },
         {

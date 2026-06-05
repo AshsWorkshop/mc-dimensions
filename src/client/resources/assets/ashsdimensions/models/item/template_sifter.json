@@ -144,12 +144,22 @@
 		}
 	],
 	"display": {
-		"ashsdimensions:in_sifter_third_person_righthand": {
+		"ashsdimensions:in_sifter_third_person_righthand_default": {
+			"rotation": [35, 0, 0],
+			"translation": [-6, 0.25, 1.75],
+			"scale": [0.65, 0.65, 0.65]
+		},
+		"ashsdimensions:in_sifter_third_person_lefthand_default": {
+			"rotation": [35, 0, 0],
+			"translation": [-6, 0.25, 1.75],
+			"scale": [0.65, 0.65, 0.65]
+		},
+		"ashsdimensions:in_sifter_third_person_righthand_slim": {
 			"rotation": [35, 0, 0],
 			"translation": [-5.5, 0.25, 1.75],
 			"scale": [0.65, 0.65, 0.65]
 		},
-		"ashsdimensions:in_sifter_third_person_lefthand": {
+		"ashsdimensions:in_sifter_third_person_lefthand_slim": {
 			"rotation": [35, 0, 0],
 			"translation": [-5.5, 0.25, 1.75],
 			"scale": [0.65, 0.65, 0.65]

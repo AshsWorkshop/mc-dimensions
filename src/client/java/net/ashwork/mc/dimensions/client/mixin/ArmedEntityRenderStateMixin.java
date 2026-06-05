@@ -50,7 +50,7 @@ public class ArmedEntityRenderStateMixin {
 
         if (Siftable.maybeSift(entity)) {
             instance.updateForLiving(
-                    output, item, displayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND ? ModelExtensions.IN_SIFTER_THIRD_PERSON_RIGHTHAND : ModelExtensions.IN_SIFTER_THIRD_PERSON_LEFTHAND, entity
+                    output, item, ModelExtensions.sifterThirdPersonDisplay(displayContext, entity), entity
             );
             return;
         }

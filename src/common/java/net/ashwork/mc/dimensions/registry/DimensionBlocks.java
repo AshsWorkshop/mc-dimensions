@@ -1,6 +1,6 @@
 package net.ashwork.mc.dimensions.registry;
 
-import net.ashwork.mc.dimensions.block.SiftedBlock;
+import net.ashwork.mc.dimensions.block.TallVegetationBlock;
 import net.ashwork.mc.dimensions.block.SiftedSandBlock;
 import net.ashwork.mc.dimensions.event.CommonEvents;
 import net.minecraft.world.item.CreativeModeTab;
@@ -26,6 +26,8 @@ public interface DimensionBlocks {
 
     static void register(IEventBus modBus) {
         CommonEvents.BUILD_TABS.add(DimensionBlocks::naturalBlocks);
+
+        registerInstance(BLOCK_TYPE, "tall_vegetation", TallVegetationBlock.CODEC);
     }
 
     static void naturalBlocks(BuildCreativeModeTabContentsEvent event) {
