@@ -11,13 +11,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
-@Mod(AshsDimensions.ID)
+@Mod(value = AshsDimensions.ID, dist = Dist.CLIENT)
 public class AshsDimensionsClient {
 
     public AshsDimensionsClient(IEventBus modBus) {
