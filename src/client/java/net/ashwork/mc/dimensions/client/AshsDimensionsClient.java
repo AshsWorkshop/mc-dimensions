@@ -6,7 +6,7 @@ import net.ashwork.mc.dimensions.client.model.ExpandedItemModelGeneratorLoader;
 import net.ashwork.mc.dimensions.client.neoext.ClientExtensions;
 import net.ashwork.mc.dimensions.client.neoext.ModelExtensions;
 import net.ashwork.mc.dimensions.client.network.ClientPayloadRegistrar;
-import net.ashwork.mc.dimensions.resources.AdvancementRequirementsFlipper;
+import net.ashwork.mc.dimensions.client.resources.ClientAdvancementRequirementsFlipper;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -33,6 +33,6 @@ public class AshsDimensionsClient {
     }
 
     private static void clearSyncedListeners(ClientPlayerNetworkEvent.LoggingOut event) {
-        AdvancementRequirementsFlipper.INSTANCE.setRequirements(Collections.emptyList());
+        ClientAdvancementRequirementsFlipper.INSTANCE.setRequirements(Collections.emptyList());
     }
 }

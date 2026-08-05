@@ -1,6 +1,7 @@
 package net.ashwork.mc.dimensions.client.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.ashwork.mc.dimensions.client.resources.ClientAdvancementRequirementsFlipper;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.multiplayer.ClientAdvancements;
 import net.minecraft.network.protocol.game.ClientboundUpdateAdvancementsPacket;
@@ -21,5 +22,6 @@ public class ClientAdvancementsMixin {
     )
     private void setAdvancementId(ClientboundUpdateAdvancementsPacket packet, CallbackInfo info, @Local Map.Entry<Identifier, AdvancementProgress> entry) {
         entry.getValue().ashsdimensions$setAdvancementId(entry.getKey());
+        entry.getValue().ashsdimensions$setFlipRequirements(ClientAdvancementRequirementsFlipper.INSTANCE::shouldFlipRequirements);
     }
 }

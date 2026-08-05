@@ -1,7 +1,6 @@
 package net.ashwork.mc.dimensions.mixin;
 
 import net.ashwork.mc.dimensions.extension.AdvancementProgressExtension;
-import net.ashwork.mc.dimensions.resources.AdvancementRequirementsFlipper;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.resources.Identifier;
@@ -13,12 +12,17 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.function.Predicate;
+
 @Mixin(AdvancementProgress.class)
 public abstract class AdvancementProgressMixin implements AdvancementProgressExtension {
 
     @Nullable
     @Unique
     private Identifier advancementId;
+    @Nullable
+    @Unique
+    private Predicate<@Nullable Identifier> flipRequirements;
 
     @Shadow
     private AdvancementRequirements requirements;
@@ -30,13 +34,18 @@ public abstract class AdvancementProgressMixin implements AdvancementProgressExt
         this.advancementId = advancement;
     }
 
+    @Override
+    public void ashsdimensions$setFlipRequirements(Predicate<@Nullable Identifier> flipRequirements) {
+        this.flipRequirements = flipRequirements;
+    }
+
     @Inject(
             method = "isDone",
             at = @At("HEAD"),
             cancellable = true
     )
     private void checkFlip(CallbackInfoReturnable<Boolean> info) {
-        if (AdvancementRequirementsFlipper.INSTANCE.shouldFlipRequirements(this.advancementId)) {
+        if (this.flipRequirements != null && this.flipRequirements.test(this.advancementId)) {
             info.setReturnValue(this.requirements.ashsdimensions$testFlip(this::isCriterionDone));
         }
     }

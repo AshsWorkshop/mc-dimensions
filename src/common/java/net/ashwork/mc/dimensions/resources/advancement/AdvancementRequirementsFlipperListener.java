@@ -1,20 +1,15 @@
-package net.ashwork.mc.dimensions.resources;
+package net.ashwork.mc.dimensions.resources.advancement;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.ashwork.mc.dimensions.network.ClientboundFlipAdvancementRequirementsDataPayload;
 import net.ashwork.mc.dimensions.util.IdUtils;
-import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.neoforged.neoforge.resource.ListenerKey;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
@@ -23,14 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class AdvancementRequirementsFlipper extends SimpleJsonResourceReloadListener<AdvancementRequirementsFlipper.Entry> {
+public class AdvancementRequirementsFlipperListener extends SimpleJsonResourceReloadListener<AdvancementRequirementsFlipperListener.Entry> implements AdvancementRequirementsFlipper {
 
-    public static final Identifier ID = IdUtils.id("flip_advancement_requirements");
+    public static final ListenerKey<AdvancementRequirementsFlipperListener> ID = ListenerKey.create(IdUtils.id("flip_advancement_requirements"));
     public static final String PATH = IdUtils.idPath("flip_advancement_requirements");
-    public static final AdvancementRequirementsFlipper INSTANCE = new AdvancementRequirementsFlipper();
     private final Set<Identifier> advancements;
 
-    private AdvancementRequirementsFlipper() {
+    public AdvancementRequirementsFlipperListener() {
         super(Entry.CODEC, FileToIdConverter.json(PATH));
         this.advancements = new HashSet<>();
     }
@@ -46,17 +40,13 @@ public class AdvancementRequirementsFlipper extends SimpleJsonResourceReloadList
         });
     }
 
-    public boolean shouldFlipRequirements(@Nullable Identifier id) {
-        return id == null ? false : this.advancements.contains(id);
+    @Override
+    public boolean shouldFlipRequirements(@Nullable Identifier advancementId) {
+        return advancementId == null ? false : this.advancements.contains(advancementId);
     }
 
     public ClientboundFlipAdvancementRequirementsDataPayload createPayload() {
         return new ClientboundFlipAdvancementRequirementsDataPayload(this.advancements.stream().toList());
-    }
-
-    public void setRequirements(Collection<Identifier> values) {
-        this.advancements.clear();
-        this.advancements.addAll(values);
     }
 
     public record Entry(List<Identifier> values, boolean replace) {

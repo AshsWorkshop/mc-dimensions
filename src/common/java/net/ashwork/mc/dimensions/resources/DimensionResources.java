@@ -1,5 +1,6 @@
 package net.ashwork.mc.dimensions.resources;
 
+import net.ashwork.mc.dimensions.resources.advancement.AdvancementRequirementsFlipperListener;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
@@ -13,19 +14,14 @@ public interface DimensionResources {
     static void setup() {
         NeoForge.EVENT_BUS.addListener(DimensionResources::registerReloadListeners);
         NeoForge.EVENT_BUS.addListener(DimensionResources::sendOnReload);
-        NeoForge.EVENT_BUS.addListener(DimensionResources::clearServerListeners);
     }
 
     static void registerReloadListeners(AddServerReloadListenersEvent event) {
-        event.addListener(AdvancementRequirementsFlipper.ID, AdvancementRequirementsFlipper.INSTANCE);
+        event.addRetainedListener(AdvancementRequirementsFlipperListener.ID, new AdvancementRequirementsFlipperListener());
     }
 
     static void sendOnReload(OnDatapackSyncEvent event) {
-        var payload = AdvancementRequirementsFlipper.INSTANCE.createPayload();
+        var payload = event.getPlayerList().getServer().getServerResources().managers().getListener(AdvancementRequirementsFlipperListener.ID).createPayload();
         event.getRelevantPlayers().forEach(player -> PacketDistributor.sendToPlayer(player, payload));
-    }
-
-    static void clearServerListeners(ServerStoppedEvent event) {
-        AdvancementRequirementsFlipper.INSTANCE.setRequirements(Collections.emptyList());
     }
 }

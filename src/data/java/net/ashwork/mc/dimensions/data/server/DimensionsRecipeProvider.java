@@ -2,7 +2,7 @@ package net.ashwork.mc.dimensions.data.server;
 
 import com.google.common.collect.Sets;
 import net.ashwork.mc.dimensions.registry.DimensionItems;
-import net.ashwork.mc.dimensions.resources.AdvancementRequirementsFlipper;
+import net.ashwork.mc.dimensions.resources.advancement.AdvancementRequirementsFlipperListener;
 import net.ashwork.mc.dimensions.tags.DimensionItemTags;
 import net.ashwork.mc.dimensions.util.IdUtils;
 import net.minecraft.advancements.Advancement;
@@ -112,7 +112,7 @@ public class DimensionsRecipeProvider extends RecipeProvider {
                             registries -> {
                                 final PackOutput.PathProvider recipePathProvider = this.packOutput.createRegistryElementsPathProvider(Registries.RECIPE);
                                 final PackOutput.PathProvider advancementPathProvider = this.packOutput.createRegistryElementsPathProvider(Registries.ADVANCEMENT);
-                                final PackOutput.PathProvider flipRequirementsProvider = this.packOutput.createPathProvider(PackOutput.Target.DATA_PACK, AdvancementRequirementsFlipper.PATH);
+                                final PackOutput.PathProvider flipRequirementsProvider = this.packOutput.createPathProvider(PackOutput.Target.DATA_PACK, AdvancementRequirementsFlipperListener.PATH);
                                 final Set<ResourceKey<Recipe<?>>> allRecipes = Sets.newHashSet();
                                 final Map<Identifier, List<Identifier>> flippers = new HashMap<>();
                                 final List<CompletableFuture<?>> tasks = new ArrayList<>();
@@ -171,8 +171,8 @@ public class DimensionsRecipeProvider extends RecipeProvider {
                                 new DimensionsRecipeProvider(registries, recipeOutput).buildRecipes();
                                 flippers.forEach((id, values) -> tasks.add(
                                         DataProvider.saveStable(
-                                                cache, registries, AdvancementRequirementsFlipper.Entry.CODEC,
-                                                new AdvancementRequirementsFlipper.Entry(values), flipRequirementsProvider.json(id)
+                                                cache, registries, AdvancementRequirementsFlipperListener.Entry.CODEC,
+                                                new AdvancementRequirementsFlipperListener.Entry(values), flipRequirementsProvider.json(id)
                                         )
                                 ));
                                 return CompletableFuture.allOf(tasks.toArray(CompletableFuture[]::new));
